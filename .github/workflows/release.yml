@@ -324,18 +324,49 @@ jobs:
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
         run: |
           API_KEY_PATH="$RUNNER_TEMP/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8"
-          # Create file with restrictive permissions before writing secret
           touch "$API_KEY_PATH" && chmod 600 "$API_KEY_PATH"
           echo "$APP_STORE_CONNECT_API_KEY_P8" | base64 --decode > "$API_KEY_PATH"
           echo "API_KEY_PATH=$API_KEY_PATH" >> $GITHUB_ENV
 
           echo "Submitting for notarization..."
-          xcrun notarytool submit "$ZIP_FILE" \
+
+          # Submit and capture output to get submission ID
+          SUBMIT_OUTPUT=$(xcrun notarytool submit "$ZIP_FILE" \
             --key "$API_KEY_PATH" \
             --key-id "$APP_STORE_CONNECT_KEY_ID" \
             --issuer "$APP_STORE_CONNECT_ISSUER_ID" \
             --wait \
-            --timeout 30m
+            --timeout 30m 2>&1) || true
+
+          echo "$SUBMIT_OUTPUT"
+
+          # Extract submission ID
+          SUBMISSION_ID=$(echo "$SUBMIT_OUTPUT" | grep "id:" | head -1 | awk '{print $2}')
+          echo "Submission ID: $SUBMISSION_ID"
+
+          # Check if notarization succeeded
+          if echo "$SUBMIT_OUTPUT" | grep -q "status: Accepted"; then
+            echo "Notarization ACCEPTED"
+          else
+            echo ""
+            echo "=========================================="
+            echo "Notarization FAILED - Fetching log..."
+            echo "=========================================="
+
+            # Fetch the notarization log
+            if [ -n "$SUBMISSION_ID" ]; then
+              xcrun notarytool log "$SUBMISSION_ID" \
+                --key "$API_KEY_PATH" \
+                --key-id "$APP_STORE_CONNECT_KEY_ID" \
+                --issuer "$APP_STORE_CONNECT_ISSUER_ID" \
+                notarization-log.json || true
+
+              echo ""
+              echo "=== Notarization Log ==="
+              cat notarization-log.json || true
+            fi
+            exit 1
+          fi
 
           echo "Stapling notarization ticket..."
           xcrun stapler staple "${APP_NAME}.app"
