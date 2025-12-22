@@ -11,6 +11,7 @@ struct MenuContentView: View {
     @State private var selectedProvider: AIProvider = .claude
     @State private var isHoveringRefresh = false
     @State private var animateIn = false
+    @State private var refreshingProviders: Set<AIProvider> = []
 
     var body: some View {
         ZStack {
@@ -53,15 +54,15 @@ struct MenuContentView: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .task {
             // Auto-refresh active provider when menu opens
-            await refresh()
+            await refresh(provider: selectedProvider)
             withAnimation(.easeOut(duration: 0.6)) {
                 animateIn = true
             }
         }
-        .onChange(of: selectedProvider) { _, _ in
+        .onChange(of: selectedProvider) { _, newProvider in
             // Refresh when user switches provider
             Task {
-                await refresh()
+                await refresh(provider: newProvider)
             }
         }
     }
@@ -354,12 +355,18 @@ struct MenuContentView: View {
 
     // MARK: - Actions
 
+    /// Refresh the currently selected provider (for button action)
+    private func refresh() async {
+        await refresh(provider: selectedProvider)
+    }
+
     /// Refresh a specific provider
     private func refresh(provider: AIProvider) async {
-        guard !appState.isRefreshing else { return }
+        // Prevent duplicate refreshes for the same provider
+        guard !refreshingProviders.contains(provider) else { return }
 
+        refreshingProviders.insert(provider)
         appState.isRefreshing = true
-        defer { appState.isRefreshing = false }
 
         do {
             // Capture provider to avoid race condition when user switches tabs
@@ -369,6 +376,13 @@ struct MenuContentView: View {
             appState.lastError = nil
         } catch {
             appState.lastError = error.localizedDescription
+        }
+
+        refreshingProviders.remove(provider)
+
+        // Only clear global refreshing if no providers are refreshing
+        if refreshingProviders.isEmpty {
+            appState.isRefreshing = false
         }
     }
 }
