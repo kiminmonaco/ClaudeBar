@@ -57,11 +57,12 @@ struct MenuContentView: View {
         .frame(width: 380)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .task {
-            // Auto-refresh active provider when menu opens
-            await refresh(providerId: selectedProviderId)
+            // Show header and tabs immediately
             withAnimation(.easeOut(duration: 0.6)) {
                 animateIn = true
             }
+            // Then fetch data in background
+            await refresh(providerId: selectedProviderId)
         }
         .onChange(of: selectedProviderId) { _, newProviderId in
             // Refresh when user switches provider
