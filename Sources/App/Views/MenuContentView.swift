@@ -157,6 +157,10 @@ struct MenuContentView: View {
         .background(
             Capsule()
                 .fill(appState.overallStatus.themeColor.opacity(0.25))
+                .overlay(
+                    Capsule()
+                        .stroke(appState.overallStatus.themeColor.opacity(0.5), lineWidth: 1)
+                )
         )
     }
 
@@ -170,7 +174,7 @@ struct MenuContentView: View {
     private var providerPills: some View {
         HStack(spacing: 8) {
             ForEach(AIProvider.allCases, id: \.self) { provider in
-                WrappedProviderPill(
+                ProviderPill(
                     provider: provider,
                     isSelected: provider == selectedProvider,
                     hasData: appState.snapshots[provider] != nil
@@ -362,9 +366,9 @@ struct MenuContentView: View {
     }
 }
 
-// MARK: - Wrapped Provider Pill
+// MARK: - Provider Pill
 
-struct WrappedProviderPill: View {
+struct ProviderPill: View {
     let provider: AIProvider
     let isSelected: Bool
     let hasData: Bool
@@ -402,15 +406,6 @@ struct WrappedProviderPill: View {
                         )
                 }
             )
-            .overlay(alignment: .topTrailing) {
-                // Data indicator
-                if hasData && !isSelected {
-                    Circle()
-                        .fill(AppTheme.statusHealthy)
-                        .frame(width: 6, height: 6)
-                        .offset(x: -4, y: 2)
-                }
-            }
         }
         .buttonStyle(.plain)
         .onHover { isHovering = $0 }

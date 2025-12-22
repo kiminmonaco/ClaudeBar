@@ -37,16 +37,16 @@ import Domain
     VStack(spacing: 20) {
         // Selected states
         HStack(spacing: 8) {
-            WrappedProviderPill(provider: .claude, isSelected: true, hasData: true) {}
-            WrappedProviderPill(provider: .codex, isSelected: false, hasData: true) {}
-            WrappedProviderPill(provider: .gemini, isSelected: false, hasData: false) {}
+            ProviderPill(provider: .claude, isSelected: true, hasData: true) {}
+            ProviderPill(provider: .codex, isSelected: false, hasData: true) {}
+            ProviderPill(provider: .gemini, isSelected: false, hasData: false) {}
         }
 
         // Different selection
         HStack(spacing: 8) {
-            WrappedProviderPill(provider: .claude, isSelected: false, hasData: true) {}
-            WrappedProviderPill(provider: .codex, isSelected: true, hasData: true) {}
-            WrappedProviderPill(provider: .gemini, isSelected: false, hasData: true) {}
+            ProviderPill(provider: .claude, isSelected: false, hasData: true) {}
+            ProviderPill(provider: .codex, isSelected: true, hasData: true) {}
+            ProviderPill(provider: .gemini, isSelected: false, hasData: true) {}
         }
     }
     .padding(40)
@@ -280,9 +280,9 @@ import Domain
 
         // Provider pills
         HStack(spacing: 8) {
-            WrappedProviderPill(provider: .claude, isSelected: true, hasData: true) {}
-            WrappedProviderPill(provider: .codex, isSelected: false, hasData: true) {}
-            WrappedProviderPill(provider: .gemini, isSelected: false, hasData: false) {}
+            ProviderPill(provider: .claude, isSelected: true, hasData: true) {}
+            ProviderPill(provider: .codex, isSelected: false, hasData: true) {}
+            ProviderPill(provider: .gemini, isSelected: false, hasData: false) {}
         }
     }
     .padding(.vertical, 20)
