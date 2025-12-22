@@ -157,10 +157,6 @@ struct MenuContentView: View {
         .background(
             Capsule()
                 .fill(appState.overallStatus.themeColor.opacity(0.25))
-                .overlay(
-                    Capsule()
-                        .stroke(appState.overallStatus.themeColor.opacity(0.5), lineWidth: 1)
-                )
         )
     }
 
