@@ -3,16 +3,16 @@ import Sparkle
 import SwiftUI
 
 /// A wrapper around SPUUpdater for SwiftUI integration.
-/// For menu bar apps, we disable automatic background checks to avoid
-/// the "gentle reminders" requirement. Updates are checked when user opens menu.
+/// This class manages the Sparkle update lifecycle and provides
+/// observable properties for UI binding.
 @MainActor
 @Observable
 final class SparkleUpdater {
     /// The underlying Sparkle updater controller (nil if bundle is invalid)
     private var controller: SPUStandardUpdaterController?
 
-    /// Whether an update is available (for showing badge)
-    private(set) var updateAvailable = false
+    /// Whether an update check is currently in progress
+    private(set) var isCheckingForUpdates = false
 
     /// Whether the updater is available (bundle is properly configured)
     var isAvailable: Bool {
@@ -29,30 +29,28 @@ final class SparkleUpdater {
         controller?.updater.lastUpdateCheckDate
     }
 
+    /// Whether automatic update checks are enabled
+    var automaticallyChecksForUpdates: Bool {
+        get { controller?.updater.automaticallyChecksForUpdates ?? false }
+        set { controller?.updater.automaticallyChecksForUpdates = newValue }
+    }
+
     init() {
-        guard Self.isProperAppBundle() else {
+        // Check if we're in a proper app bundle
+        if Self.isProperAppBundle() {
+            // Normal app bundle - initialize Sparkle
+            controller = SPUStandardUpdaterController(
+                startingUpdater: true,
+                updaterDelegate: nil,
+                userDriverDelegate: nil
+            )
+        } else {
+            // Debug/development build - Sparkle won't work without proper bundle
             print("SparkleUpdater: Not running from app bundle, updater disabled")
-            return
         }
-
-        // Initialize Sparkle WITHOUT starting automatic checks
-        // This avoids the "gentle reminders" warning for menu bar apps
-        controller = SPUStandardUpdaterController(
-            startingUpdater: false,
-            updaterDelegate: nil,
-            userDriverDelegate: nil
-        )
-
-        // Disable automatic background checks - we'll check manually
-        controller?.updater.automaticallyChecksForUpdates = false
     }
 
-    /// Start the updater (call when app is ready)
-    func start() {
-        controller?.startUpdater()
-    }
-
-    /// Manually check for updates (shows UI)
+    /// Manually check for updates
     func checkForUpdates() {
         guard let controller = controller, controller.updater.canCheckForUpdates else {
             return
@@ -60,23 +58,21 @@ final class SparkleUpdater {
         controller.checkForUpdates(nil)
     }
 
-    /// Check for updates silently when menu opens
-    /// Only shows UI if an update is found
+    /// Check for updates in the background (no UI unless update found)
     func checkForUpdatesInBackground() {
-        guard let updater = controller?.updater, updater.canCheckForUpdates else {
-            return
-        }
-        updater.checkForUpdatesInBackground()
+        controller?.updater.checkForUpdatesInBackground()
     }
 
     /// Check if running from a proper .app bundle
     private static func isProperAppBundle() -> Bool {
         let bundle = Bundle.main
 
+        // Check bundle path ends with .app
         guard bundle.bundlePath.hasSuffix(".app") else {
             return false
         }
 
+        // Check required keys exist
         guard let info = bundle.infoDictionary,
               info["CFBundleIdentifier"] != nil,
               info["CFBundleVersion"] != nil,

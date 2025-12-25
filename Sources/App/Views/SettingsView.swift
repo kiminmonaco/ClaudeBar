@@ -593,10 +593,16 @@ struct SettingsContentView: View {
                     sparkleUpdater?.checkForUpdates()
                 } label: {
                     HStack(spacing: 6) {
-                        Image(systemName: "arrow.clockwise")
-                            .font(.system(size: 11, weight: .semibold))
+                        if sparkleUpdater?.isCheckingForUpdates == true {
+                            ProgressView()
+                                .scaleEffect(0.6)
+                                .frame(width: 14, height: 14)
+                        } else {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 11, weight: .semibold))
+                        }
 
-                        Text("Check for Updates")
+                        Text(sparkleUpdater?.isCheckingForUpdates == true ? "Checking..." : "Check for Updates")
                             .font(AppTheme.bodyFont(size: 11))
                     }
                     .foregroundStyle(.white)
@@ -618,7 +624,7 @@ struct SettingsContentView: View {
                     )
                 }
                 .buttonStyle(.plain)
-                .disabled(sparkleUpdater?.canCheckForUpdates != true)
+                .disabled(sparkleUpdater?.canCheckForUpdates != true || sparkleUpdater?.isCheckingForUpdates == true)
                 .opacity(sparkleUpdater?.canCheckForUpdates == true ? 1 : 0.6)
 
                 // Last check info
@@ -633,10 +639,23 @@ struct SettingsContentView: View {
                     .foregroundStyle(isChristmas ? AppTheme.christmasTextTertiary : AppTheme.textTertiary(for: colorScheme))
                 }
 
-                // Note about update checking
-                Text("Updates checked when menu opens")
-                    .font(AppTheme.captionFont(size: 9))
-                    .foregroundStyle(isChristmas ? AppTheme.christmasTextTertiary : AppTheme.textTertiary(for: colorScheme))
+                // Auto updates toggle
+                HStack {
+                    Text("Check automatically")
+                        .font(AppTheme.bodyFont(size: 11))
+                        .foregroundStyle(isChristmas ? AppTheme.christmasTextPrimary : AppTheme.textPrimary(for: colorScheme))
+
+                    Spacer()
+
+                    Toggle("", isOn: Binding(
+                        get: { sparkleUpdater?.automaticallyChecksForUpdates ?? true },
+                        set: { sparkleUpdater?.automaticallyChecksForUpdates = $0 }
+                    ))
+                    .toggleStyle(.switch)
+                    .tint(AppTheme.purpleVibrant(for: colorScheme))
+                    .scaleEffect(0.8)
+                    .labelsHidden()
+                }
             } else {
                 // Debug mode message
                 HStack(spacing: 6) {
