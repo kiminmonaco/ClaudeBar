@@ -10,6 +10,11 @@ on:
         description: 'Version to release (e.g., 1.0.0 or 1.0.0-beta.1)'
         required: true
         type: string
+      publish_appcast:
+        description: 'Publish appcast to GitHub Pages (auto-updates)'
+        required: false
+        type: boolean
+        default: true
       debug:
         description: 'Enable verbose debug output'
         required: false
@@ -384,7 +389,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Sparkle Appcast
-        if: ${{ steps.version.outputs.is_prerelease == 'false' }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish_appcast) || (github.event_name == 'push' && steps.version.outputs.is_prerelease == 'false') }}
         env:
           SPARKLE_EDDSA_PRIVATE_KEY: ${{ secrets.SPARKLE_EDDSA_PRIVATE_KEY }}
         run: |
