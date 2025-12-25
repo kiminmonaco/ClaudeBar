@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- CHANGELOG.md as single source of truth for release notes
+- `extract-changelog.sh` script to parse version-specific notes
+- Release notes now automatically sync to GitHub Releases and Sparkle appcast
+
+### Changed
+- Release workflow uses CHANGELOG.md instead of auto-generated notes
+
 ## [0.2.4] - 2025-12-25
 
 ### Fixed
