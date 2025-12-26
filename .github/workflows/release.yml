@@ -112,12 +112,14 @@ jobs:
           ARCHIVE_PATH="build/${APP_NAME}.xcarchive"
 
           # Build for both architectures using xcodebuild archive
+          # -skipMacroValidation: Trust Swift macros from packages (Mockable)
           xcodebuild archive \
             -workspace "${APP_NAME}.xcworkspace" \
             -scheme "${APP_NAME}" \
             -configuration Release \
             -archivePath "$ARCHIVE_PATH" \
             -destination "generic/platform=macOS" \
+            -skipMacroValidation \
             ARCHS="arm64 x86_64" \
             ONLY_ACTIVE_ARCH=NO \
             CODE_SIGN_IDENTITY="-" \
