@@ -29,7 +29,7 @@ let project = Project(
         .target(
             name: "Domain",
             destinations: .macOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.tddworks.claudebar.domain",
             deploymentTargets: .macOS("15.0"),
             sources: ["Sources/Domain/**"],
@@ -47,7 +47,7 @@ let project = Project(
         .target(
             name: "Infrastructure",
             destinations: .macOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.tddworks.claudebar.infrastructure",
             deploymentTargets: .macOS("15.0"),
             sources: ["Sources/Infrastructure/**"],
