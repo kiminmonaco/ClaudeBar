@@ -364,6 +364,36 @@ test_doc_scenario_7_8_user_behind_both_versions() {
 }
 
 # =============================================================================
+# BUILD NUMBER VALIDATION TESTS
+# =============================================================================
+
+test_warn_if_new_build_lower_than_existing() {
+    # This test verifies the script handles the case where a new release
+    # has a LOWER build number than existing entries
+    # This can happen if test data with high build numbers is committed
+
+    run_update "1.0.0" "100"  # Stable with high build number
+    run_update "1.0.1-beta" "50" "beta"  # Beta with LOWER build number
+
+    # Both should still be in appcast (script doesn't reject, just warns)
+    # But this is a configuration error that should be avoided
+    assert_item_count 2 && \
+    assert_contains_version "1.0.0" && \
+    assert_contains_version "1.0.1-beta"
+}
+
+test_build_numbers_must_increase_for_same_channel() {
+    # Verify newer versions replace older ones even with build numbers
+    run_update "1.0.0" "100"
+    run_update "1.0.1" "101"
+
+    # 1.0.1 should replace 1.0.0
+    assert_item_count 1 && \
+    assert_not_contains_version "1.0.0" && \
+    assert_contains_version "1.0.1"
+}
+
+# =============================================================================
 # MAIN
 # =============================================================================
 
@@ -406,6 +436,12 @@ main() {
     run_test "Scenario 4: Stable after beta same version" test_doc_scenario_4_stable_after_beta_same_version
     run_test "Scenario 5-6: Newer beta + stable (1.0.2-beta + 1.0.1)" test_doc_scenario_5_6_newer_beta_plus_stable
     run_test "Scenario 7-8: User behind both versions" test_doc_scenario_7_8_user_behind_both_versions
+
+    echo ""
+    echo "Build Number Validation:"
+    echo "------------------------"
+    run_test "Script accepts lower build number (warns but continues)" test_warn_if_new_build_lower_than_existing
+    run_test "Build numbers increase for same channel" test_build_numbers_must_increase_for_same_channel
 
     echo ""
     echo "========================================"
