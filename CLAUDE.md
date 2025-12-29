@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ClaudeBar is a macOS menu bar application that monitors AI coding assistant usage quotas (Claude, Codex, Gemini, GitHub Copilot). It probes CLI tools to fetch quota information and displays it in a menu bar interface with system notifications for status changes.
+ClaudeBar is a macOS menu bar application that monitors AI coding assistant usage quotas (Claude, Codex, Gemini, GitHub Copilot, Antigravity). It probes CLI tools to fetch quota information and displays it in a menu bar interface with system notifications for status changes.
 
 ## Build & Test Commands
 
@@ -70,10 +70,12 @@ The project follows a layered architecture with protocol-based dependency inject
     - `GeminiUsageProbe` - coordinates `GeminiAPIProbe` with network client
     - `GeminiProjectRepository` - discovers Gemini projects for quota lookup
     - `CopilotUsageProbe` - probes GitHub Copilot usage via credentials and API
+    - `AntigravityUsageProbe` - probes local Antigravity language server via process detection and local API
   - Adapters (`Adapters/`): Pure adapters for 3rd party interaction (excluded from coverage)
     - `PTYCommandRunner` - runs CLI commands with PTY for interactive prompts
     - `ProcessRPCTransport` - JSON-RPC over Process stdin/stdout pipes
     - `DefaultCLIExecutor` - real CLI execution using PTYCommandRunner
+    - `InsecureLocalhostNetworkClient` - NetworkClient that accepts self-signed certs for localhost (used by Antigravity)
   - Network (`Network/`): `NetworkClient` protocol for HTTP abstraction
   - Notifications (`Notifications/`): `NotificationQuotaObserver` - macOS notification center
 
@@ -100,10 +102,27 @@ The codebase separates testable logic from external system interaction:
 
 ### Adding a New AI Provider
 
-1. Create a new provider class implementing `AIProvider` in `Sources/Domain/Provider/`
-2. Create probe in `Sources/Infrastructure/CLI/` implementing `UsageProbe`
-3. Register provider in `ClaudeBarApp.init()`
-4. Add parsing tests in `Tests/InfrastructureTests/CLI/`
+Use the **add-provider** skill to guide you through adding new AI providers following TDD patterns:
+
+```
+Tell Claude Code: "I want to add a new provider for [ProviderName]"
+```
+
+The skill will guide you through:
+
+1. **Parsing Tests** → Create tests for API/CLI response parsing first
+2. **Probe Behavior Tests** → Test detection and error handling with mocks
+3. **Probe Implementation** → Implement `UsageProbe` in `Sources/Infrastructure/CLI/`
+4. **Provider Class** → Create `AIProvider` in `Sources/Domain/Provider/`
+5. **Registration** → Add to `ClaudeBarApp.init()` and `AIProviderRegistry`
+
+**Skill location:** `.claude/skills/add-provider/SKILL.md`
+
+**Reference implementation:** See `AntigravityUsageProbe` for a complete example of:
+- Local process detection via `ps` and `lsof`
+- CSRF token extraction from process args
+- Local API calls with self-signed cert handling
+- Parsing JSON responses to `UsageSnapshot` with `UsageQuota` array
 
 ## Assets
 
