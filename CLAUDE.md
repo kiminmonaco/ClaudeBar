@@ -136,11 +136,13 @@ Sources/App/Resources/
 │   ├── ClaudeIcon.imageset/   # Provider icons (PNG @1x, @2x, @3x)
 │   ├── CodexIcon.imageset/
 │   ├── CopilotIcon.imageset/
-│   └── GeminiIcon.imageset/
+│   ├── GeminiIcon.imageset/
+│   └── AntigravityIcon.imageset/
 ├── ClaudeIcon.svg             # Source SVG files (kept for reference)
 ├── CodexIcon.svg
 ├── CopilotIcon.png
-└── GeminiIcon.svg
+├── GeminiIcon.svg
+└── AntigravityIcon.svg
 ```
 
 - **Runtime**: PNGs from `Assets.xcassets` loaded via `NSImage(named:)`
@@ -280,6 +282,7 @@ Common error patterns logged:
 - `"Claude probe blocked: folder trust required"` → Trust the folder in Claude CLI
 - `"Codex probe failed: data not available yet"` → Wait for Codex to sync
 - `"Gemini probe failed: no access token"` → Re-authenticate with Gemini CLI
+- `"Antigravity probe failed: server not found"` → Ensure Antigravity app is running locally
 
 ## Dependencies
 
