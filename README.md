@@ -27,7 +27,7 @@
 >
 > **Happy Holidays!** ❤️🎁
 
-A macOS menu bar application that monitors AI coding assistant usage quotas. Keep track of your Claude, Codex, Gemini, and GitHub Copilot usage at a glance.
+A macOS menu bar application that monitors AI coding assistant usage quotas. Keep track of your Claude, Codex, Gemini, GitHub Copilot, and Antigravity usage at a glance.
 
 <p align="center">
   <img src="docs/Screenshot-dark.png" alt="ClaudeBar Dark Mode" width="380"/>
@@ -49,7 +49,7 @@ A macOS menu bar application that monitors AI coding assistant usage quotas. Kee
 
 ## Features
 
-- **Multi-Provider Support** - Monitor Claude, Codex, Gemini, and GitHub Copilot quotas in one place
+- **Multi-Provider Support** - Monitor Claude, Codex, Gemini, GitHub Copilot, and Antigravity quotas in one place
 - **Real-Time Quota Tracking** - View Session, Weekly, and Model-specific usage percentages
 - **Light & Dark Themes** - Automatically adapts to your system appearance
 - **Seasonal Themes** - Festive Christmas theme with snowfall animation, auto-enabled during the holiday season
@@ -76,6 +76,7 @@ A macOS menu bar application that monitors AI coding assistant usage quotas. Kee
   - [Codex CLI](https://github.com/openai/codex) (`codex`)
   - [Gemini CLI](https://github.com/google-gemini/gemini-cli) (`gemini`)
   - [GitHub Copilot](https://github.com/features/copilot) - Configure credentials in Settings
+  - [Antigravity](https://codeium.com/antigravity) - Auto-detected when running locally
 
 ## Installation
 
@@ -158,11 +159,11 @@ ClaudeBar uses a layered architecture with protocol-based dependency injection:
 └─────────────────────────────────────────────────┘
                         │
                         ▼
-┌─────────────────────────────────────────────────┐
-│              Infrastructure Layer               │
-│  Probes: Claude, Codex, Gemini, Copilot probes  │
-│  Adapters: Pure 3rd-party wrappers (no coverage)│
-└─────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│                 Infrastructure Layer                    │
+│  Probes: Claude, Codex, Gemini, Copilot, Antigravity    │
+│  Adapters: Pure 3rd-party wrappers (no coverage)        │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ### Key Design Decisions
