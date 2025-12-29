@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.5] - 2025-12-29
+
+### Added
+- **Google Antigravity Support**: Monitor your Antigravity AI assistant usage quota directly from the menu bar alongside Claude, Codex, Gemini, and GitHub Copilot
+- **Local Server Detection**: Automatically detects running Antigravity language server and retrieves quota information via local API
+- **Provider Icon**: New Antigravity icon in the provider list for easy identification
+
+### Improved
+- **Developer Documentation**: New TDD-based skill guide for adding AI providers, making it easier for contributors to add support for additional assistants
+- **Secure Localhost Connections**: Added dedicated network client for handling self-signed certificates on localhost connections
+
+### Technical
+- Implemented `AntigravityUsageProbe` with process detection via `ps` and `lsof`
+- Added CSRF token extraction from process arguments for secure API calls
+- Created `InsecureLocalhostNetworkClient` adapter for self-signed cert handling
+- Added `AntigravityProvider` domain model with observable state
+- Comprehensive test coverage for process detection, API parsing, and error handling
+
 ## [0.2.4] - 2025-12-29
 
 ### Added
@@ -79,7 +97,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Menu bar interface with quota display
 - Automatic refresh every 5 minutes
 
-[Unreleased]: https://github.com/tddworks/ClaudeBar/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/tddworks/ClaudeBar/compare/v0.2.5...HEAD
+[0.2.5]: https://github.com/tddworks/ClaudeBar/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/tddworks/ClaudeBar/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/tddworks/ClaudeBar/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/tddworks/ClaudeBar/compare/v0.2.1...v0.2.2
