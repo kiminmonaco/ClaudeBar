@@ -94,23 +94,23 @@ public struct AntigravityUsageProbe: UsageProbe {
     }
 
     private func detectProcess() async throws -> ProcessInfo {
-        // Use -ww for wide output to avoid command line truncation
+        // Use pgrep for more reliable process detection (avoids PTY buffering issues)
         let result = try cliExecutor.execute(
-            binary: "/bin/ps",
-            args: ["-ax", "-ww", "-o", "pid=,command="],
+            binary: "/usr/bin/pgrep",
+            args: ["-lf", "language_server_macos"],
             input: nil,
             timeout: timeout,
             workingDirectory: nil,
             autoResponses: [:]
         )
 
-        // Handle different line endings from PTY output (\n, \r\n, \r)
+        // Handle different line endings
         let normalizedOutput = result.output
             .replacingOccurrences(of: "\r\n", with: "\n")
             .replacingOccurrences(of: "\r", with: "\n")
         let lines = normalizedOutput.split(separator: "\n", omittingEmptySubsequences: true)
 
-        AppLog.probes.debug("Antigravity: ps returned \(lines.count) process lines")
+        AppLog.probes.debug("Antigravity: pgrep returned \(lines.count) matching processes")
 
         for line in lines {
             let lineStr = String(line).trimmingCharacters(in: .whitespaces)
@@ -118,18 +118,15 @@ public struct AntigravityUsageProbe: UsageProbe {
 
             guard let pid = Self.extractPID(from: lineStr) else { continue }
 
-            // Debug: log the command line we're parsing
-            AppLog.probes.debug("Antigravity: Checking process line (length=\(lineStr.count)): \(lineStr.prefix(200))...")
+            AppLog.probes.debug("Antigravity: Checking process (length=\(lineStr.count)): \(lineStr.prefix(200))...")
 
             if let csrfToken = Self.extractCSRFToken(from: lineStr) {
                 let extensionPort = Self.extractExtensionPort(from: lineStr)
                 AppLog.probes.debug("Antigravity process detected: PID=\(pid), hasCSRF=true, extPort=\(extensionPort ?? 0)")
                 return ProcessInfo(pid: pid, csrfToken: csrfToken, extensionPort: extensionPort)
             } else {
-                // Process found but no CSRF token - log more details
                 AppLog.probes.error("Antigravity process found (PID=\(pid)) but missing CSRF token")
                 AppLog.probes.debug("Antigravity: Full command line: \(lineStr)")
-                AppLog.probes.debug("Antigravity: Contains --csrf_token? \(lineStr.contains("--csrf_token"))")
                 throw ProbeError.authenticationRequired
             }
         }
