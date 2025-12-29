@@ -1,28 +1,7 @@
 import Testing
 import Foundation
+import Mockable
 @testable import Domain
-
-/// Mock probe for testing
-struct MockProbe: UsageProbe {
-    var isAvailableResult: Bool = true
-    var probeResult: UsageSnapshot?
-    var probeError: Error?
-
-    func probe() async throws -> UsageSnapshot {
-        if let error = probeError {
-            throw error
-        }
-        return probeResult ?? UsageSnapshot(
-            providerId: "mock",
-            quotas: [],
-            capturedAt: Date()
-        )
-    }
-
-    func isAvailable() async -> Bool {
-        isAvailableResult
-    }
-}
 
 @Suite
 struct QuotaMonitorTests {
@@ -32,7 +11,9 @@ struct QuotaMonitorTests {
     @Test
     func `monitor can refresh a provider by ID`() async throws {
         // Given
-        let probe = MockProbe(probeResult: UsageSnapshot(
+        let probe = MockUsageProbe()
+        given(probe).isAvailable().willReturn(true)
+        given(probe).probe().willReturn(UsageSnapshot(
             providerId: "claude",
             quotas: [
                 UsageQuota(percentRemaining: 65, quotaType: .session, providerId: "claude"),
@@ -55,7 +36,8 @@ struct QuotaMonitorTests {
     @Test
     func `monitor skips unavailable providers`() async {
         // Given
-        let probe = MockProbe(isAvailableResult: false)
+        let probe = MockUsageProbe()
+        given(probe).isAvailable().willReturn(false)
         let provider = ClaudeProvider(probe: probe)
         let monitor = QuotaMonitor(providers: [provider])
 
@@ -71,12 +53,17 @@ struct QuotaMonitorTests {
     @Test
     func `monitor refreshes all providers concurrently`() async {
         // Given
-        let claudeProbe = MockProbe(probeResult: UsageSnapshot(
+        let claudeProbe = MockUsageProbe()
+        given(claudeProbe).isAvailable().willReturn(true)
+        given(claudeProbe).probe().willReturn(UsageSnapshot(
             providerId: "claude",
             quotas: [UsageQuota(percentRemaining: 70, quotaType: .session, providerId: "claude")],
             capturedAt: Date()
         ))
-        let codexProbe = MockProbe(probeResult: UsageSnapshot(
+
+        let codexProbe = MockUsageProbe()
+        given(codexProbe).isAvailable().willReturn(true)
+        given(codexProbe).probe().willReturn(UsageSnapshot(
             providerId: "codex",
             quotas: [UsageQuota(percentRemaining: 40, quotaType: .session, providerId: "codex")],
             capturedAt: Date()
@@ -97,12 +84,17 @@ struct QuotaMonitorTests {
     @Test
     func `one provider failure does not affect others`() async {
         // Given
-        let claudeProbe = MockProbe(probeResult: UsageSnapshot(
+        let claudeProbe = MockUsageProbe()
+        given(claudeProbe).isAvailable().willReturn(true)
+        given(claudeProbe).probe().willReturn(UsageSnapshot(
             providerId: "claude",
             quotas: [UsageQuota(percentRemaining: 70, quotaType: .session, providerId: "claude")],
             capturedAt: Date()
         ))
-        let codexProbe = MockProbe(probeError: ProbeError.timeout)
+
+        let codexProbe = MockUsageProbe()
+        given(codexProbe).isAvailable().willReturn(true)
+        given(codexProbe).probe().willThrow(ProbeError.timeout)
 
         let claudeProvider = ClaudeProvider(probe: claudeProbe)
         let codexProvider = CodexProvider(probe: codexProbe)
@@ -122,17 +114,25 @@ struct QuotaMonitorTests {
     @Test
     func `refreshOthers excludes the specified provider`() async {
         // Given
-        let claudeProbe = MockProbe(probeResult: UsageSnapshot(
+        let claudeProbe = MockUsageProbe()
+        given(claudeProbe).isAvailable().willReturn(true)
+        given(claudeProbe).probe().willReturn(UsageSnapshot(
             providerId: "claude",
             quotas: [UsageQuota(percentRemaining: 70, quotaType: .session, providerId: "claude")],
             capturedAt: Date()
         ))
-        let codexProbe = MockProbe(probeResult: UsageSnapshot(
+
+        let codexProbe = MockUsageProbe()
+        given(codexProbe).isAvailable().willReturn(true)
+        given(codexProbe).probe().willReturn(UsageSnapshot(
             providerId: "codex",
             quotas: [UsageQuota(percentRemaining: 50, quotaType: .session, providerId: "codex")],
             capturedAt: Date()
         ))
-        let geminiProbe = MockProbe(probeResult: UsageSnapshot(
+
+        let geminiProbe = MockUsageProbe()
+        given(geminiProbe).isAvailable().willReturn(true)
+        given(geminiProbe).probe().willReturn(UsageSnapshot(
             providerId: "gemini",
             quotas: [UsageQuota(percentRemaining: 30, quotaType: .session, providerId: "gemini")],
             capturedAt: Date()
@@ -157,7 +157,7 @@ struct QuotaMonitorTests {
     @Test
     func `monitor can find provider by ID`() async {
         // Given
-        let probe = MockProbe()
+        let probe = MockUsageProbe()
         let provider = ClaudeProvider(probe: probe)
         let monitor = QuotaMonitor(providers: [provider])
 
@@ -185,12 +185,17 @@ struct QuotaMonitorTests {
     @Test
     func `monitor calculates overall status from all providers`() async {
         // Given
-        let claudeProbe = MockProbe(probeResult: UsageSnapshot(
+        let claudeProbe = MockUsageProbe()
+        given(claudeProbe).isAvailable().willReturn(true)
+        given(claudeProbe).probe().willReturn(UsageSnapshot(
             providerId: "claude",
             quotas: [UsageQuota(percentRemaining: 70, quotaType: .session, providerId: "claude")], // healthy
             capturedAt: Date()
         ))
-        let codexProbe = MockProbe(probeResult: UsageSnapshot(
+
+        let codexProbe = MockUsageProbe()
+        given(codexProbe).isAvailable().willReturn(true)
+        given(codexProbe).probe().willReturn(UsageSnapshot(
             providerId: "codex",
             quotas: [UsageQuota(percentRemaining: 15, quotaType: .session, providerId: "codex")], // critical
             capturedAt: Date()
@@ -214,7 +219,9 @@ struct QuotaMonitorTests {
     @Test
     func `monitor can start continuous monitoring`() async throws {
         // Given
-        let probe = MockProbe(probeResult: UsageSnapshot(
+        let probe = MockUsageProbe()
+        given(probe).isAvailable().willReturn(true)
+        given(probe).probe().willReturn(UsageSnapshot(
             providerId: "claude",
             quotas: [UsageQuota(percentRemaining: 50, quotaType: .session, providerId: "claude")],
             capturedAt: Date()
@@ -244,7 +251,9 @@ struct QuotaMonitorTests {
     @Test
     func `monitor stops when requested`() async throws {
         // Given
-        let probe = MockProbe(probeResult: UsageSnapshot(
+        let probe = MockUsageProbe()
+        given(probe).isAvailable().willReturn(true)
+        given(probe).probe().willReturn(UsageSnapshot(
             providerId: "claude",
             quotas: [UsageQuota(percentRemaining: 50, quotaType: .session, providerId: "claude")],
             capturedAt: Date()

@@ -20,8 +20,8 @@ struct UserDefaultsCredentialStoreTests {
 
     // MARK: - Save Tests
 
-    @Test("save stores value in UserDefaults")
-    func saveStoresValue() {
+    @Test
+    func `save stores value in UserDefaults`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -34,8 +34,8 @@ struct UserDefaultsCredentialStoreTests {
         #expect(retrieved == "test-token")
     }
 
-    @Test("save overwrites existing value")
-    func saveOverwritesExistingValue() {
+    @Test
+    func `save overwrites existing value`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -49,8 +49,8 @@ struct UserDefaultsCredentialStoreTests {
         #expect(retrieved == "new-token")
     }
 
-    @Test("save handles empty string")
-    func saveHandlesEmptyString() {
+    @Test
+    func `save handles empty string`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -65,8 +65,8 @@ struct UserDefaultsCredentialStoreTests {
 
     // MARK: - Get Tests
 
-    @Test("get returns nil for non-existent key")
-    func getReturnsNilForNonExistentKey() {
+    @Test
+    func `get returns nil for non-existent key`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -78,8 +78,8 @@ struct UserDefaultsCredentialStoreTests {
         #expect(retrieved == nil)
     }
 
-    @Test("get returns stored value")
-    func getReturnsStoredValue() {
+    @Test
+    func `get returns stored value`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -94,8 +94,8 @@ struct UserDefaultsCredentialStoreTests {
 
     // MARK: - Delete Tests
 
-    @Test("delete removes stored value")
-    func deleteRemovesStoredValue() {
+    @Test
+    func `delete removes stored value`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -109,8 +109,8 @@ struct UserDefaultsCredentialStoreTests {
         #expect(retrieved == nil)
     }
 
-    @Test("delete does not throw for non-existent key")
-    func deleteDoesNotThrowForNonExistentKey() {
+    @Test
+    func `delete does not throw for non-existent key`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -121,8 +121,8 @@ struct UserDefaultsCredentialStoreTests {
 
     // MARK: - Exists Tests
 
-    @Test("exists returns false for non-existent key")
-    func existsReturnsFalseForNonExistentKey() {
+    @Test
+    func `exists returns false for non-existent key`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -134,8 +134,8 @@ struct UserDefaultsCredentialStoreTests {
         #expect(exists == false)
     }
 
-    @Test("exists returns true for stored value")
-    func existsReturnsTrueForStoredValue() {
+    @Test
+    func `exists returns true for stored value`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -148,8 +148,8 @@ struct UserDefaultsCredentialStoreTests {
         #expect(exists == true)
     }
 
-    @Test("exists returns false after delete")
-    func existsReturnsFalseAfterDelete() {
+    @Test
+    func `exists returns false after delete`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -165,8 +165,8 @@ struct UserDefaultsCredentialStoreTests {
 
     // MARK: - Integration Tests
 
-    @Test("full lifecycle: save, get, exists, delete")
-    func fullLifecycle() {
+    @Test
+    func `full lifecycle: save, get, exists, delete`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }
@@ -190,8 +190,8 @@ struct UserDefaultsCredentialStoreTests {
         #expect(store.get(forKey: "lifecycle-key") == nil)
     }
 
-    @Test("multiple keys are independent")
-    func multipleKeysAreIndependent() {
+    @Test
+    func `multiple keys are independent`() {
         // Given
         let store = makeStore()
         defer { cleanupDefaults() }

@@ -9,8 +9,8 @@ struct CopilotUsageProbeTests {
 
     // MARK: - isAvailable Tests
 
-    @Test("isAvailable returns true when token and username are configured")
-    func isAvailableReturnsTrueWhenConfigured() async {
+    @Test
+    func `isAvailable returns true when token and username are configured`() async {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_test_token")
@@ -22,8 +22,8 @@ struct CopilotUsageProbeTests {
         #expect(await probe.isAvailable() == true)
     }
 
-    @Test("isAvailable returns false when token is missing")
-    func isAvailableReturnsFalseWhenTokenMissing() async {
+    @Test
+    func `isAvailable returns false when token is missing`() async {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn(nil)
@@ -35,8 +35,8 @@ struct CopilotUsageProbeTests {
         #expect(await probe.isAvailable() == false)
     }
 
-    @Test("isAvailable returns false when username is missing")
-    func isAvailableReturnsFalseWhenUsernameMissing() async {
+    @Test
+    func `isAvailable returns false when username is missing`() async {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_test_token")
@@ -48,8 +48,8 @@ struct CopilotUsageProbeTests {
         #expect(await probe.isAvailable() == false)
     }
 
-    @Test("isAvailable returns false when token is empty")
-    func isAvailableReturnsFalseWhenTokenEmpty() async {
+    @Test
+    func `isAvailable returns false when token is empty`() async {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("")
@@ -63,8 +63,8 @@ struct CopilotUsageProbeTests {
 
     // MARK: - Probe Tests
 
-    @Test("probe throws authenticationRequired when token is missing")
-    func probeThrowsWhenTokenMissing() async throws {
+    @Test
+    func `probe throws authenticationRequired when token is missing`() async throws {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn(nil)
@@ -78,8 +78,8 @@ struct CopilotUsageProbeTests {
         }
     }
 
-    @Test("probe throws executionFailed when username is missing")
-    func probeThrowsWhenUsernameMissing() async throws {
+    @Test
+    func `probe throws executionFailed when username is missing`() async throws {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
@@ -93,8 +93,8 @@ struct CopilotUsageProbeTests {
         }
     }
 
-    @Test("probe parses valid response correctly")
-    func probeParseValidResponse() async throws {
+    @Test
+    func `probe parses valid response correctly`() async throws {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
@@ -152,8 +152,8 @@ struct CopilotUsageProbeTests {
         #expect(quota.resetText == "100/2000 requests")
     }
 
-    @Test("probe calculates percentage correctly with multiple items")
-    func probeCalculatesMultipleItems() async throws {
+    @Test
+    func `probe calculates percentage correctly with multiple items`() async throws {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
@@ -210,8 +210,8 @@ struct CopilotUsageProbeTests {
         #expect(quota.resetText == "200/2000 requests")
     }
 
-    @Test("probe returns 100% remaining when no usage")
-    func probeReturns100WhenNoUsage() async throws {
+    @Test
+    func `probe returns 100 percent remaining when no usage`() async throws {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
@@ -251,8 +251,8 @@ struct CopilotUsageProbeTests {
 
     // MARK: - Error Handling Tests
 
-    @Test("probe throws authenticationRequired on 401 response")
-    func probeThrowsOn401() async throws {
+    @Test
+    func `probe throws authenticationRequired on 401 response`() async throws {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
@@ -279,8 +279,8 @@ struct CopilotUsageProbeTests {
         }
     }
 
-    @Test("probe throws executionFailed on 403 response")
-    func probeThrowsOn403() async throws {
+    @Test
+    func `probe throws executionFailed on 403 response`() async throws {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
@@ -307,8 +307,8 @@ struct CopilotUsageProbeTests {
         }
     }
 
-    @Test("probe throws parseFailed on invalid JSON")
-    func probeThrowsOnInvalidJSON() async throws {
+    @Test
+    func `probe throws parseFailed on invalid JSON`() async throws {
         // Given
         let mockStore = MockCredentialStore()
         given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")

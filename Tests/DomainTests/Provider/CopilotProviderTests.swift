@@ -8,32 +8,32 @@ struct CopilotProviderTests {
 
     // MARK: - Identity Tests
 
-    @Test("copilot provider has correct id")
-    func copilotProviderHasCorrectId() {
+    @Test
+    func `copilot provider has correct id`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
 
         #expect(copilot.id == "copilot")
     }
 
-    @Test("copilot provider has correct name")
-    func copilotProviderHasCorrectName() {
+    @Test
+    func `copilot provider has correct name`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
 
         #expect(copilot.name == "Copilot")
     }
 
-    @Test("copilot provider has correct cliCommand")
-    func copilotProviderHasCorrectCliCommand() {
+    @Test
+    func `copilot provider has correct cliCommand`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
 
         #expect(copilot.cliCommand == "gh")
     }
 
-    @Test("copilot provider has dashboard URL pointing to GitHub")
-    func copilotProviderHasGitHubDashboardUrl() {
+    @Test
+    func `copilot provider has dashboard URL pointing to GitHub`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
 
@@ -41,8 +41,8 @@ struct CopilotProviderTests {
         #expect(copilot.dashboardURL?.host?.contains("github") == true)
     }
 
-    @Test("copilot provider has status page URL")
-    func copilotProviderHasStatusPageUrl() {
+    @Test
+    func `copilot provider has status page URL`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
 
@@ -50,8 +50,8 @@ struct CopilotProviderTests {
         #expect(copilot.statusPageURL?.host?.contains("githubstatus") == true)
     }
 
-    @Test("copilot provider is enabled by default")
-    func copilotProviderIsEnabledByDefault() {
+    @Test
+    func `copilot provider is enabled by default`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
 
@@ -60,24 +60,24 @@ struct CopilotProviderTests {
 
     // MARK: - State Tests
 
-    @Test("copilot provider starts with no snapshot")
-    func copilotProviderStartsWithNoSnapshot() {
+    @Test
+    func `copilot provider starts with no snapshot`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
 
         #expect(copilot.snapshot == nil)
     }
 
-    @Test("copilot provider starts not syncing")
-    func copilotProviderStartsNotSyncing() {
+    @Test
+    func `copilot provider starts not syncing`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
 
         #expect(copilot.isSyncing == false)
     }
 
-    @Test("copilot provider starts with no error")
-    func copilotProviderStartsWithNoError() {
+    @Test
+    func `copilot provider starts with no error`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
 
@@ -86,8 +86,8 @@ struct CopilotProviderTests {
 
     // MARK: - Delegation Tests
 
-    @Test("copilot provider delegates isAvailable to probe")
-    func copilotProviderDelegatesIsAvailable() async {
+    @Test
+    func `copilot provider delegates isAvailable to probe`() async {
         let mockProbe = MockUsageProbe()
         given(mockProbe).isAvailable().willReturn(true)
         let copilot = CopilotProvider(probe: mockProbe)
@@ -97,8 +97,8 @@ struct CopilotProviderTests {
         #expect(isAvailable == true)
     }
 
-    @Test("copilot provider delegates isAvailable false to probe")
-    func copilotProviderDelegatesIsAvailableFalse() async {
+    @Test
+    func `copilot provider delegates isAvailable false to probe`() async {
         let mockProbe = MockUsageProbe()
         given(mockProbe).isAvailable().willReturn(false)
         let copilot = CopilotProvider(probe: mockProbe)
@@ -108,8 +108,8 @@ struct CopilotProviderTests {
         #expect(isAvailable == false)
     }
 
-    @Test("copilot provider delegates refresh to probe")
-    func copilotProviderDelegatesRefresh() async throws {
+    @Test
+    func `copilot provider delegates refresh to probe`() async throws {
         let expectedSnapshot = UsageSnapshot(
             providerId: "copilot",
             quotas: [UsageQuota(percentRemaining: 95, quotaType: .session, providerId: "copilot", resetText: "100/2000 requests")],
@@ -128,8 +128,8 @@ struct CopilotProviderTests {
 
     // MARK: - Snapshot Storage Tests
 
-    @Test("copilot provider stores snapshot after refresh")
-    func copilotProviderStoresSnapshot() async throws {
+    @Test
+    func `copilot provider stores snapshot after refresh`() async throws {
         let expectedSnapshot = UsageSnapshot(
             providerId: "copilot",
             quotas: [UsageQuota(percentRemaining: 80, quotaType: .session, providerId: "copilot")],
@@ -147,8 +147,8 @@ struct CopilotProviderTests {
         #expect(copilot.snapshot?.quotas.first?.percentRemaining == 80)
     }
 
-    @Test("copilot provider clears error on successful refresh")
-    func copilotProviderClearsErrorOnSuccess() async throws {
+    @Test
+    func `copilot provider clears error on successful refresh`() async throws {
         // Use two separate probes to simulate the behavior
         let failingProbe = MockUsageProbe()
         given(failingProbe).probe().willThrow(ProbeError.timeout)
@@ -174,8 +174,8 @@ struct CopilotProviderTests {
 
     // MARK: - Error Handling Tests
 
-    @Test("copilot provider stores error on refresh failure")
-    func copilotProviderStoresError() async {
+    @Test
+    func `copilot provider stores error on refresh failure`() async {
         let mockProbe = MockUsageProbe()
         given(mockProbe).probe().willThrow(ProbeError.authenticationRequired)
         let copilot = CopilotProvider(probe: mockProbe)
@@ -191,8 +191,8 @@ struct CopilotProviderTests {
         #expect(copilot.lastError != nil)
     }
 
-    @Test("copilot provider rethrows probe errors")
-    func copilotProviderRethrowsErrors() async {
+    @Test
+    func `copilot provider rethrows probe errors`() async {
         let mockProbe = MockUsageProbe()
         given(mockProbe).probe().willThrow(ProbeError.authenticationRequired)
         let copilot = CopilotProvider(probe: mockProbe)
@@ -204,8 +204,8 @@ struct CopilotProviderTests {
 
     // MARK: - Syncing State Tests
 
-    @Test("copilot provider resets isSyncing after refresh completes")
-    func copilotProviderResetsSyncingAfterRefresh() async throws {
+    @Test
+    func `copilot provider resets isSyncing after refresh completes`() async throws {
         let mockProbe = MockUsageProbe()
         given(mockProbe).probe().willReturn(UsageSnapshot(
             providerId: "copilot",
@@ -221,8 +221,8 @@ struct CopilotProviderTests {
         #expect(copilot.isSyncing == false)
     }
 
-    @Test("copilot provider resets isSyncing after refresh fails")
-    func copilotProviderResetsSyncingAfterFailure() async {
+    @Test
+    func `copilot provider resets isSyncing after refresh fails`() async {
         let mockProbe = MockUsageProbe()
         given(mockProbe).probe().willThrow(ProbeError.timeout)
         let copilot = CopilotProvider(probe: mockProbe)
@@ -238,8 +238,8 @@ struct CopilotProviderTests {
 
     // MARK: - Uniqueness Tests
 
-    @Test("copilot provider has unique id compared to other providers")
-    func copilotProviderHasUniqueId() {
+    @Test
+    func `copilot provider has unique id compared to other providers`() {
         let mockProbe = MockUsageProbe()
         let copilot = CopilotProvider(probe: mockProbe)
         let claude = ClaudeProvider(probe: mockProbe)
