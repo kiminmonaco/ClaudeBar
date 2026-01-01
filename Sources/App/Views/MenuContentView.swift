@@ -17,6 +17,7 @@ struct MenuContentView: View {
     #if ENABLE_SPARKLE
     @Environment(\.sparkleUpdater) private var sparkleUpdater
     #endif
+    @State private var selectedProviderId: String = "claude"
     @State private var isHoveringRefresh = false
     @State private var animateIn = false
     @State private var showSettings = false
@@ -24,14 +25,9 @@ struct MenuContentView: View {
     @State private var settings = AppSettings.shared
     @State private var hasRequestedNotificationPermission = false
 
-    /// The currently selected provider (from monitor)
+    /// The currently selected provider
     private var selectedProvider: (any AIProvider)? {
-        monitor.selectedProvider
-    }
-
-    /// Currently selected provider ID (from monitor)
-    private var selectedProviderId: String {
-        monitor.selectedProviderId
+        monitor.enabledProviders.first { $0.id == selectedProviderId }
     }
 
     var body: some View {
@@ -271,7 +267,7 @@ struct MenuContentView: View {
 
     /// Only show enabled providers in the pills
     private var enabledProviders: [any AIProvider] {
-        monitor.providers.enabled
+        monitor.enabledProviders
     }
 
     private var providerPills: some View {
@@ -284,8 +280,8 @@ struct MenuContentView: View {
                         isSelected: provider.id == selectedProviderId,
                         hasData: provider.snapshot != nil
                     ) {
-                        Task {
-                            await monitor.selectProvider(id: provider.id)
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                            selectedProviderId = provider.id
                         }
                     }
                 }
@@ -294,10 +290,10 @@ struct MenuContentView: View {
         .opacity(animateIn ? 1 : 0)
         .offset(y: animateIn ? 0 : 10)
         .animation(.easeOut(duration: 0.5).delay(0.1), value: animateIn)
-        .onChange(of: enabledProviders.map(\.id)) { _, _ in
+        .onChange(of: enabledProviders.map(\.id)) { _, newIds in
             // If currently selected provider is disabled, select first enabled one
-            Task {
-                await monitor.ensureValidSelection()
+            if !newIds.contains(selectedProviderId), let firstId = newIds.first {
+                selectedProviderId = firstId
             }
         }
     }
@@ -557,7 +553,7 @@ struct MenuContentView: View {
 
     /// Refresh a specific provider by ID
     private func refresh(providerId: String) async {
-        guard let provider = monitor.providers.provider(id: providerId) else {
+        guard let provider = monitor.provider(for: providerId) else {
             return
         }
 

@@ -178,7 +178,7 @@ struct SettingsContentView: View {
 
             // Provider toggles
             VStack(spacing: 8) {
-                ForEach(monitor.providers.all, id: \.id) { provider in
+                ForEach(monitor.allProviders, id: \.id) { provider in
                     providerToggleRow(provider: provider)
                 }
             }
@@ -941,7 +941,7 @@ struct SettingsContentView: View {
         // Add Copilot provider if enabled and not already present
         if settings.copilotEnabled {
             let copilotProvider = CopilotProvider(probe: CopilotUsageProbe())
-            monitor.providers.add(copilotProvider)
+            monitor.addProvider(copilotProvider)
 
             // Trigger refresh for the new provider
             Task {
@@ -957,7 +957,7 @@ struct SettingsContentView: View {
     private func deleteToken() {
         settings.deleteCopilotToken()
         saveError = nil
-        monitor.providers.remove(id: "copilot")
+        monitor.removeProvider(id: "copilot")
     }
 }
 

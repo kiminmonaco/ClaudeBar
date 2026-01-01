@@ -12,8 +12,8 @@ public enum MonitoringEvent: Sendable {
 /// Providers are rich domain models that own their own snapshots.
 /// QuotaMonitor coordinates refreshes and optionally notifies a status handler.
 public actor QuotaMonitor {
-    /// The providers repository (nonisolated for UI access - AIProviders is Sendable)
-    public nonisolated let providers: AIProviders
+    /// The providers repository (internal - access via delegation methods)
+    private let providers: AIProviders
 
     /// Optional listener for status changes (e.g., QuotaAlerter)
     private let statusListener: (any QuotaStatusListener)?
@@ -118,21 +118,31 @@ public actor QuotaMonitor {
         }
     }
 
-    // MARK: - Queries
+    // MARK: - Queries (nonisolated for UI access)
 
     /// Returns the provider with the given ID
-    public func provider(for id: String) -> (any AIProvider)? {
+    public nonisolated func provider(for id: String) -> (any AIProvider)? {
         providers.provider(id: id)
     }
 
     /// Returns all providers
-    public var allProviders: [any AIProvider] {
+    public nonisolated var allProviders: [any AIProvider] {
         providers.all
     }
 
     /// Returns only enabled providers
-    public var enabledProviders: [any AIProvider] {
+    public nonisolated var enabledProviders: [any AIProvider] {
         providers.enabled
+    }
+
+    /// Adds a provider dynamically
+    public nonisolated func addProvider(_ provider: any AIProvider) {
+        providers.add(provider)
+    }
+
+    /// Removes a provider by ID
+    public nonisolated func removeProvider(id: String) {
+        providers.remove(id: id)
     }
 
     /// Returns the lowest quota across all enabled providers
@@ -143,7 +153,7 @@ public actor QuotaMonitor {
     }
 
     /// Returns the overall status across enabled providers (worst status wins)
-    public func overallStatus() -> QuotaStatus {
+    public nonisolated func overallStatus() -> QuotaStatus {
         providers.enabled
             .compactMap(\.snapshot?.overallStatus)
             .max() ?? .healthy
