@@ -9,7 +9,7 @@ import Domain
 /// Requires a fine-grained PAT with "Plan: read" permission.
 public struct CopilotUsageProbe: UsageProbe {
     private let networkClient: any NetworkClient
-    private let credentialStore: any CredentialStore
+    private let credentialRepository: any CredentialRepository
     private let timeout: TimeInterval
 
     private static let apiBaseURL = "https://api.github.com"
@@ -17,17 +17,17 @@ public struct CopilotUsageProbe: UsageProbe {
 
     public init(
         networkClient: any NetworkClient = URLSession.shared,
-        credentialStore: any CredentialStore = UserDefaultsCredentialStore.shared,
+        credentialRepository: any CredentialRepository = UserDefaultsCredentialRepository.shared,
         timeout: TimeInterval = 30
     ) {
         self.networkClient = networkClient
-        self.credentialStore = credentialStore
+        self.credentialRepository = credentialRepository
         self.timeout = timeout
     }
 
     public func isAvailable() async -> Bool {
-        guard let token = credentialStore.get(forKey: CredentialKey.githubToken),
-              let username = credentialStore.get(forKey: CredentialKey.githubUsername),
+        guard let token = credentialRepository.get(forKey: CredentialKey.githubToken),
+              let username = credentialRepository.get(forKey: CredentialKey.githubUsername),
               !token.isEmpty,
               !username.isEmpty else {
             AppLog.probes.debug("Copilot: Not available - missing token or username")
@@ -37,12 +37,12 @@ public struct CopilotUsageProbe: UsageProbe {
     }
 
     public func probe() async throws -> UsageSnapshot {
-        guard let token = credentialStore.get(forKey: CredentialKey.githubToken), !token.isEmpty else {
+        guard let token = credentialRepository.get(forKey: CredentialKey.githubToken), !token.isEmpty else {
             AppLog.probes.error("Copilot: No GitHub token configured")
             throw ProbeError.authenticationRequired
         }
 
-        guard let username = credentialStore.get(forKey: CredentialKey.githubUsername), !username.isEmpty else {
+        guard let username = credentialRepository.get(forKey: CredentialKey.githubUsername), !username.isEmpty else {
             AppLog.probes.error("Copilot: No GitHub username configured")
             throw ProbeError.executionFailed("GitHub username not configured")
         }

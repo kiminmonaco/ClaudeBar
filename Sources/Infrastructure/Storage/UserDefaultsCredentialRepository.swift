@@ -1,13 +1,13 @@
 import Foundation
 import Domain
 
-/// A credential store that uses UserDefaults for persistence.
+/// A credential repository that uses UserDefaults for persistence.
 /// Simple and suitable for non-sensitive data or when Keychain is not required.
-public final class UserDefaultsCredentialStore: CredentialStore, @unchecked Sendable {
+public final class UserDefaultsCredentialRepository: CredentialRepository, @unchecked Sendable {
     private let defaults: UserDefaults
     private let keyPrefix: String
 
-    /// Creates a credential store with the specified UserDefaults instance.
+    /// Creates a credential repository with the specified UserDefaults instance.
     /// - Parameters:
     ///   - defaults: The UserDefaults instance to use (defaults to .standard)
     ///   - keyPrefix: A prefix for all keys to avoid collisions (defaults to "com.claudebar.credentials.")
@@ -20,9 +20,9 @@ public final class UserDefaultsCredentialStore: CredentialStore, @unchecked Send
     }
 
     /// The shared instance using standard UserDefaults.
-    public static let shared = UserDefaultsCredentialStore()
+    public static let shared = UserDefaultsCredentialRepository()
 
-    // MARK: - CredentialStore
+    // MARK: - CredentialRepository
 
     public func save(_ value: String, forKey key: String) {
         defaults.set(value, forKey: prefixedKey(key))

@@ -4,7 +4,7 @@ import Mockable
 /// Protocol for storing and retrieving credentials.
 /// Allows different implementations (UserDefaults, Keychain, etc.) and easy testing.
 @Mockable
-public protocol CredentialStore: Sendable {
+public protocol CredentialRepository: Sendable {
     /// Saves a credential value for the given key.
     func save(_ value: String, forKey key: String)
 

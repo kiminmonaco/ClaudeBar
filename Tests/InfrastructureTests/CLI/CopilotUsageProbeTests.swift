@@ -12,11 +12,11 @@ struct CopilotUsageProbeTests {
     @Test
     func `isAvailable returns true when token and username are configured`() async {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_test_token")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_test_token")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
-        let probe = CopilotUsageProbe(credentialStore: mockStore)
+        let probe = CopilotUsageProbe(credentialRepository: mockCredentials)
 
         // When & Then
         #expect(await probe.isAvailable() == true)
@@ -25,11 +25,11 @@ struct CopilotUsageProbeTests {
     @Test
     func `isAvailable returns false when token is missing`() async {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn(nil)
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn(nil)
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
-        let probe = CopilotUsageProbe(credentialStore: mockStore)
+        let probe = CopilotUsageProbe(credentialRepository: mockCredentials)
 
         // When & Then
         #expect(await probe.isAvailable() == false)
@@ -38,11 +38,11 @@ struct CopilotUsageProbeTests {
     @Test
     func `isAvailable returns false when username is missing`() async {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_test_token")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn(nil)
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_test_token")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn(nil)
 
-        let probe = CopilotUsageProbe(credentialStore: mockStore)
+        let probe = CopilotUsageProbe(credentialRepository: mockCredentials)
 
         // When & Then
         #expect(await probe.isAvailable() == false)
@@ -51,11 +51,11 @@ struct CopilotUsageProbeTests {
     @Test
     func `isAvailable returns false when token is empty`() async {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
-        let probe = CopilotUsageProbe(credentialStore: mockStore)
+        let probe = CopilotUsageProbe(credentialRepository: mockCredentials)
 
         // When & Then
         #expect(await probe.isAvailable() == false)
@@ -66,11 +66,11 @@ struct CopilotUsageProbeTests {
     @Test
     func `probe throws authenticationRequired when token is missing`() async throws {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn(nil)
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn(nil)
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
-        let probe = CopilotUsageProbe(credentialStore: mockStore)
+        let probe = CopilotUsageProbe(credentialRepository: mockCredentials)
 
         // When & Then
         await #expect(throws: ProbeError.authenticationRequired) {
@@ -81,11 +81,11 @@ struct CopilotUsageProbeTests {
     @Test
     func `probe throws executionFailed when username is missing`() async throws {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn(nil)
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn(nil)
 
-        let probe = CopilotUsageProbe(credentialStore: mockStore)
+        let probe = CopilotUsageProbe(credentialRepository: mockCredentials)
 
         // When & Then
         await #expect(throws: ProbeError.self) {
@@ -96,9 +96,9 @@ struct CopilotUsageProbeTests {
     @Test
     func `probe parses valid response correctly`() async throws {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
         let mockNetwork = MockNetworkClient()
         let responseJSON = """
@@ -134,7 +134,7 @@ struct CopilotUsageProbeTests {
 
         let probe = CopilotUsageProbe(
             networkClient: mockNetwork,
-            credentialStore: mockStore
+            credentialRepository: mockCredentials
         )
 
         // When
@@ -155,9 +155,9 @@ struct CopilotUsageProbeTests {
     @Test
     func `probe calculates percentage correctly with multiple items`() async throws {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
         let mockNetwork = MockNetworkClient()
         let responseJSON = """
@@ -197,7 +197,7 @@ struct CopilotUsageProbeTests {
 
         let probe = CopilotUsageProbe(
             networkClient: mockNetwork,
-            credentialStore: mockStore
+            credentialRepository: mockCredentials
         )
 
         // When
@@ -213,9 +213,9 @@ struct CopilotUsageProbeTests {
     @Test
     func `probe returns 100 percent remaining when no usage`() async throws {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
         let mockNetwork = MockNetworkClient()
         let responseJSON = """
@@ -237,7 +237,7 @@ struct CopilotUsageProbeTests {
 
         let probe = CopilotUsageProbe(
             networkClient: mockNetwork,
-            credentialStore: mockStore
+            credentialRepository: mockCredentials
         )
 
         // When
@@ -254,9 +254,9 @@ struct CopilotUsageProbeTests {
     @Test
     func `probe throws authenticationRequired on 401 response`() async throws {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
         let mockNetwork = MockNetworkClient()
         let response = HTTPURLResponse(
@@ -270,7 +270,7 @@ struct CopilotUsageProbeTests {
 
         let probe = CopilotUsageProbe(
             networkClient: mockNetwork,
-            credentialStore: mockStore
+            credentialRepository: mockCredentials
         )
 
         // When & Then
@@ -282,9 +282,9 @@ struct CopilotUsageProbeTests {
     @Test
     func `probe throws executionFailed on 403 response`() async throws {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
         let mockNetwork = MockNetworkClient()
         let response = HTTPURLResponse(
@@ -298,7 +298,7 @@ struct CopilotUsageProbeTests {
 
         let probe = CopilotUsageProbe(
             networkClient: mockNetwork,
-            credentialStore: mockStore
+            credentialRepository: mockCredentials
         )
 
         // When & Then
@@ -310,9 +310,9 @@ struct CopilotUsageProbeTests {
     @Test
     func `probe throws parseFailed on invalid JSON`() async throws {
         // Given
-        let mockStore = MockCredentialStore()
-        given(mockStore).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
-        given(mockStore).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
+        let mockCredentials = MockCredentialRepository()
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubToken)).willReturn("ghp_token")
+        given(mockCredentials).get(forKey: .value(CredentialKey.githubUsername)).willReturn("testuser")
 
         let mockNetwork = MockNetworkClient()
         let invalidJSON = "not valid json".data(using: .utf8)!
@@ -327,7 +327,7 @@ struct CopilotUsageProbeTests {
 
         let probe = CopilotUsageProbe(
             networkClient: mockNetwork,
-            credentialStore: mockStore
+            credentialRepository: mockCredentials
         )
 
         // When & Then
