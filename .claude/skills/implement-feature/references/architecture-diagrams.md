@@ -53,7 +53,7 @@ ASCII diagrams for documenting feature architecture before implementation.
 │  │                         Domain Layer                                │ │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────────┐  │ │
 │  │  │ UsageQuota   │  │ UsageSnapshot│  │ QuotaMonitor (actor)     │  │ │
-│  │  │ QuotaStatus  │  │ AIProvider   │  │ QuotaStatusListener      │  │ │
+│  │  │ QuotaStatus  │  │ AIProvider   │  │ QuotaAlerter             │  │ │
 │  │  └──────────────┘  └──────────────┘  └──────────────────────────┘  │ │
 │  └────────────────────────────────────────────────────────────────────┘ │
 │                                    ▲                                     │
@@ -69,7 +69,7 @@ ASCII diagrams for documenting feature architecture before implementation.
 │  │  └────────────────────────────────────────────────────────────┘    │ │
 │  │                                                                     │ │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────────┐  │ │
-│  │  │ CLIExecutor  │  │ NetworkClient│  │ QuotaAlerter             │  │ │
+│  │  │ CLIExecutor  │  │ NetworkClient│  │ NotificationAlerter      │  │ │
 │  │  └──────────────┘  └──────────────┘  └──────────────────────────┘  │ │
 │  └────────────────────────────────────────────────────────────────────┘ │
 │                                    ▲                                     │

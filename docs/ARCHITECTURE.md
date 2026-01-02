@@ -283,7 +283,7 @@ Sources/
 │   │   └── QuotaStatus.swift
 │   └── Monitor/
 │       ├── QuotaMonitor.swift       # Single source of truth
-│       └── QuotaStatusListener.swift
+│       └── QuotaAlerter.swift       # Domain protocol for alerts
 │
 ├── Infrastructure/                  # Technical implementations
 │   ├── CLI/                         # Probe implementations
@@ -291,7 +291,7 @@ Sources/
 │   ├── Adapters/                    # 3rd-party wrappers (no coverage)
 │   ├── Network/                     # HTTP abstraction
 │   ├── Logging/                     # Dual-output logging
-│   └── Notifications/               # System alerts
+│   └── Notifications/               # NotificationAlerter (implements QuotaAlerter)
 │
 └── App/                             # SwiftUI application
     ├── ClaudeBarApp.swift           # Entry point, wires dependencies
