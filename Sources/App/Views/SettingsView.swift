@@ -699,8 +699,8 @@ struct SettingsContentView: View {
                             )
                             .frame(width: 32, height: 32)
 
-                        Image(systemName: zaiConfigExpanded ? "chevron.down" : "chevron.right")
-                            .font(.system(size: 10, weight: .bold))
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(.white)
                     }
 
@@ -715,6 +715,11 @@ struct SettingsContentView: View {
                     }
 
                     Spacer()
+
+                    // Expand/collapse indicator
+                    Image(systemName: zaiConfigExpanded ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(AppTheme.textTertiary(for: colorScheme))
                 }
             }
             .buttonStyle(.plain)
