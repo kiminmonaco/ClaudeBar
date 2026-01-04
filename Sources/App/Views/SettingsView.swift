@@ -93,7 +93,7 @@ struct SettingsContentView: View {
                 .padding(.bottom, 12)
         }
         .frame(maxHeight: maxSettingsHeight)
-                .onAppear {
+        .onAppear {
             // Initialize budget input with current value
             if settings.claudeApiBudget > 0 {
                 budgetInput = String(describing: settings.claudeApiBudget)
