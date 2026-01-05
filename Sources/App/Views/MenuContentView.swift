@@ -134,7 +134,7 @@ struct MenuContentView: View {
                     .fill(
                         RadialGradient(
                             colors: [
-                                AppTheme.violetElectric(for: colorScheme).opacity(colorScheme == .dark ? 0.4 : 0.15),
+                                BaseTheme.purpleVibrant.opacity(colorScheme == .dark ? 0.4 : 0.15),
                                 Color.clear
                             ],
                             center: .center,
@@ -151,7 +151,7 @@ struct MenuContentView: View {
                     .fill(
                         RadialGradient(
                             colors: [
-                                AppTheme.pinkHot(for: colorScheme).opacity(colorScheme == .dark ? 0.35 : 0.12),
+                                BaseTheme.pinkHot.opacity(colorScheme == .dark ? 0.35 : 0.12),
                                 Color.clear
                             ],
                             center: .center,
@@ -328,38 +328,38 @@ struct MenuContentView: View {
             // Avatar circle
             ZStack {
                 Circle()
-                    .fill(AppTheme.providerGradient(for: selectedProviderId, scheme: colorScheme))
+                    .fill(ProviderVisualIdentityLookup.gradient(for: selectedProviderId, scheme: colorScheme))
                     .frame(width: 32, height: 32)
 
                 Text(String(displayName.prefix(1)).uppercased())
-                    .font(AppTheme.titleFont(size: 14))
+                    .font(.system(size: 14, weight: .bold, design: theme.fontDesign))
                     .foregroundStyle(.white)
             }
 
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {
                     Text(displayName)
-                        .font(AppTheme.bodyFont(size: 12))
+                        .font(.system(size: 12, weight: .medium, design: theme.fontDesign))
                         .foregroundStyle(theme.textPrimary)
                         .lineLimit(1)
 
                     // Account tier badge
                     if let accountTier = snapshot.accountTier {
                         Text(accountTier.badgeText)
-                            .font(AppTheme.captionFont(size: 8))
+                            .font(.system(size: 8, weight: .semibold, design: theme.fontDesign))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 5)
                             .padding(.vertical, 2)
                             .background(
                                 Capsule()
-                                    .fill(AppTheme.purpleVibrant(for: colorScheme).opacity(0.8))
+                                    .fill(theme.accentPrimary.opacity(0.8))
                             )
                     }
                 }
 
                 Text("Updated \(snapshot.ageDescription)")
-                    .font(AppTheme.captionFont(size: 10))
-                    .foregroundStyle(AppTheme.textTertiary(for: colorScheme))
+                    .font(.system(size: 10, weight: .semibold, design: theme.fontDesign))
+                    .foregroundStyle(theme.textTertiary)
             }
 
             Spacer()
@@ -368,7 +368,7 @@ struct MenuContentView: View {
             if snapshot.isStale {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 12))
-                    .foregroundStyle(AppTheme.statusWarning(for: colorScheme))
+                    .foregroundStyle(theme.statusWarning)
             }
         }
         .glassCard(cornerRadius: 12, padding: 10)
@@ -409,21 +409,21 @@ struct MenuContentView: View {
         VStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(AppTheme.statusWarning(for: colorScheme).opacity(0.2))
+                    .fill(theme.statusWarning.opacity(0.2))
                     .frame(width: 60, height: 60)
 
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 28))
-                    .foregroundStyle(AppTheme.statusWarning(for: colorScheme))
+                    .foregroundStyle(theme.statusWarning)
             }
 
             Text("\(selectedProvider?.name ?? selectedProviderId) Unavailable")
-                .font(AppTheme.titleFont(size: 14))
+                .font(.system(size: 14, weight: .bold, design: theme.fontDesign))
                 .foregroundStyle(theme.textPrimary)
 
             Text("Install CLI or check configuration")
-                .font(AppTheme.captionFont(size: 11))
-                .foregroundStyle(AppTheme.textTertiary(for: colorScheme))
+                .font(.system(size: 11, weight: .semibold, design: theme.fontDesign))
+                .foregroundStyle(theme.textTertiary)
         }
         .frame(height: 140)
         .frame(maxWidth: .infinity)
@@ -628,7 +628,7 @@ struct ProviderPill: View {
     }
 
     private var providerIcon: String {
-        AppTheme.providerSymbolIcon(for: providerId)
+        ProviderVisualIdentityLookup.symbolIcon(for: providerId)
     }
 }
 
@@ -741,20 +741,20 @@ struct WrappedStatCard: View {
 // MARK: - Loading Spinner View
 
 struct LoadingSpinnerView: View {
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.appTheme) private var theme
     @State private var isSpinning = false
 
     var body: some View {
         VStack(spacing: 16) {
             ZStack {
                 Circle()
-                    .stroke(AppTheme.textTertiary(for: colorScheme), lineWidth: 3)
+                    .stroke(theme.textTertiary, lineWidth: 3)
                     .frame(width: 50, height: 50)
 
                 Circle()
                     .trim(from: 0, to: 0.3)
                     .stroke(
-                        AppTheme.accentGradient(for: colorScheme),
+                        theme.accentGradient,
                         style: StrokeStyle(lineWidth: 3, lineCap: .round)
                     )
                     .frame(width: 50, height: 50)
@@ -766,7 +766,7 @@ struct LoadingSpinnerView: View {
             }
 
             Text("Fetching usage data...")
-                .font(AppTheme.bodyFont(size: 13))
+                .font(.system(size: 13, weight: .medium, design: theme.fontDesign))
                 .foregroundStyle(theme.textSecondary)
         }
         .frame(height: 140)

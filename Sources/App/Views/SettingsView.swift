@@ -247,7 +247,7 @@ struct SettingsContentView: View {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 10, weight: .bold))
                     Text("Back")
-                        .font(AppTheme.bodyFont(size: 11))
+                        .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                 }
                 .foregroundStyle(theme.textPrimary)
                 .padding(.horizontal, 10)
@@ -266,7 +266,7 @@ struct SettingsContentView: View {
             Spacer()
 
             Text("Settings")
-                .font(AppTheme.titleFont(size: 16))
+                .font(.system(size: 16, weight: .bold, design: theme.fontDesign))
                 .foregroundStyle(theme.textPrimary)
 
             Spacer()
@@ -360,7 +360,7 @@ struct SettingsContentView: View {
             // Budget Amount
             VStack(alignment: .leading, spacing: 6) {
                 Text("MONTHLY BUDGET (USD)")
-                    .font(AppTheme.captionFont(size: 9))
+                    .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(theme.textSecondary)
                     .tracking(0.5)
 
@@ -393,11 +393,11 @@ struct SettingsContentView: View {
             // Help text
             VStack(alignment: .leading, spacing: 4) {
                 Text("Get warnings when approaching your budget threshold.")
-                    .font(AppTheme.captionFont(size: 9))
+                    .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(theme.textTertiary)
 
                 Text("Only applies to Claude API accounts, not Claude Max.")
-                    .font(AppTheme.captionFont(size: 9))
+                    .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(theme.textTertiary)
             }
         }
@@ -486,7 +486,7 @@ struct SettingsContentView: View {
             // GitHub Username
             VStack(alignment: .leading, spacing: 6) {
                 Text("GITHUB USERNAME")
-                    .font(AppTheme.captionFont(size: 9))
+                    .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(theme.textSecondary)
                     .tracking(0.5)
 
@@ -509,7 +509,7 @@ struct SettingsContentView: View {
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
                     Text("PERSONAL ACCESS TOKEN")
-                        .font(AppTheme.captionFont(size: 9))
+                        .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                         .foregroundStyle(theme.textSecondary)
                         .tracking(0.5)
 
@@ -520,7 +520,7 @@ struct SettingsContentView: View {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 9))
                             Text("Configured")
-                                .font(AppTheme.captionFont(size: 9))
+                                .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                         }
                         .foregroundStyle(theme.statusHealthy)
                     }
@@ -570,7 +570,7 @@ struct SettingsContentView: View {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .font(.system(size: 9))
                         Text(error)
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     }
                     .foregroundStyle(theme.statusCritical)
                 } else if saveSuccess {
@@ -578,7 +578,7 @@ struct SettingsContentView: View {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.system(size: 9))
                         Text("Token saved!")
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     }
                     .foregroundStyle(theme.statusHealthy)
                 }
@@ -587,7 +587,7 @@ struct SettingsContentView: View {
             // Environment Variable (Alternative)
             VStack(alignment: .leading, spacing: 6) {
                 Text("AUTH TOKEN ENV VAR (ALTERNATIVE)")
-                    .font(AppTheme.captionFont(size: 9))
+                    .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(theme.textSecondary)
                     .tracking(0.5)
 
@@ -612,7 +612,7 @@ struct SettingsContentView: View {
             // Explanatory text
             VStack(alignment: .leading, spacing: 4) {
                 Text("TOKEN LOOKUP ORDER")
-                    .font(AppTheme.captionFont(size: 9))
+                    .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(theme.textSecondary)
                     .tracking(0.5)
 
@@ -630,7 +630,7 @@ struct SettingsContentView: View {
                     ProgressView()
                         .scaleEffect(0.7)
                     Text("Testing connection...")
-                        .font(AppTheme.bodyFont(size: 11))
+                        .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                         .foregroundStyle(theme.textSecondary)
                 }
             } else {
@@ -640,7 +640,7 @@ struct SettingsContentView: View {
                     }
                 } label: {
                     Text("Save & Test Connection")
-                        .font(AppTheme.bodyFont(size: 11))
+                        .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                         .foregroundStyle(.white)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
@@ -654,20 +654,20 @@ struct SettingsContentView: View {
 
             if let result = copilotTestResult {
                 Text(result)
-                    .font(AppTheme.captionFont(size: 9))
+                    .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(result.contains("Success") ? theme.statusHealthy : theme.statusCritical)
             }
 
             // Help text and link
             VStack(alignment: .leading, spacing: 4) {
                 Text("Create a fine-grained PAT with 'Plan: read' permission")
-                    .font(AppTheme.captionFont(size: 9))
+                    .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(theme.textTertiary)
 
                 Link(destination: URL(string: "https://github.com/settings/tokens?type=beta")!) {
                     HStack(spacing: 3) {
                         Text("Create token on GitHub")
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                         Image(systemName: "arrow.up.right")
                             .font(.system(size: 7, weight: .bold))
                     }
@@ -684,7 +684,7 @@ struct SettingsContentView: View {
                         Image(systemName: "trash.fill")
                             .font(.system(size: 9))
                         Text("Remove Token")
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     }
                     .foregroundStyle(theme.statusCritical)
                 }
@@ -755,7 +755,7 @@ struct SettingsContentView: View {
                     // Explanation text
                     VStack(alignment: .leading, spacing: 6) {
                         Text("TOKEN LOOKUP ORDER")
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                             .foregroundStyle(theme.textSecondary)
                             .tracking(0.5)
 
@@ -769,7 +769,7 @@ struct SettingsContentView: View {
 
                     VStack(alignment: .leading, spacing: 6) {
                         Text("SETTINGS.JSON PATH")
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                             .foregroundStyle(theme.textSecondary)
                             .tracking(0.5)
 
@@ -793,7 +793,7 @@ struct SettingsContentView: View {
 
                     VStack(alignment: .leading, spacing: 6) {
                         Text("AUTH TOKEN ENV VAR (FALLBACK)")
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                             .foregroundStyle(theme.textSecondary)
                             .tracking(0.5)
 
@@ -817,7 +817,7 @@ struct SettingsContentView: View {
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Leave both empty to use default path with no env var fallback")
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                             .foregroundStyle(theme.textTertiary)
                     }
                 }
@@ -897,7 +897,7 @@ struct SettingsContentView: View {
                         }
 
                         Text(sparkleUpdater?.isCheckingForUpdates == true ? "Checking..." : "Check for Updates")
-                            .font(AppTheme.bodyFont(size: 11))
+                            .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                     }
                     .foregroundStyle(.white)
                     .padding(.horizontal, 14)
@@ -928,7 +928,7 @@ struct SettingsContentView: View {
                             .font(.system(size: 8))
 
                         Text("Last checked: \(lastCheck.formatted(date: .abbreviated, time: .shortened))")
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                     }
                     .foregroundStyle(theme.textTertiary)
                 }
@@ -936,7 +936,7 @@ struct SettingsContentView: View {
                 // Auto updates toggle
                 HStack {
                     Text("Check automatically")
-                        .font(AppTheme.bodyFont(size: 11))
+                        .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                         .foregroundStyle(theme.textPrimary)
 
                     Spacer()
@@ -955,11 +955,11 @@ struct SettingsContentView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Include beta versions")
-                            .font(AppTheme.bodyFont(size: 11))
+                            .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                             .foregroundStyle(theme.textPrimary)
 
                         Text("Get early access to new features")
-                            .font(AppTheme.captionFont(size: 9))
+                            .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                             .foregroundStyle(theme.textTertiary)
                     }
 
@@ -1053,7 +1053,7 @@ struct SettingsContentView: View {
                         .font(.system(size: 11, weight: .semibold))
 
                     Text("Open Log File")
-                        .font(AppTheme.bodyFont(size: 11))
+                        .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal, 14)
@@ -1077,7 +1077,7 @@ struct SettingsContentView: View {
 
             // Help text
             Text("Opens ClaudeBar.log in TextEdit")
-                .font(AppTheme.captionFont(size: 9))
+                .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                 .foregroundStyle(theme.textTertiary)
         }
         .padding(14)
@@ -1110,7 +1110,7 @@ struct SettingsContentView: View {
                 }
             } label: {
                 Text("Done")
-                    .font(AppTheme.bodyFont(size: 11))
+                    .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 7)

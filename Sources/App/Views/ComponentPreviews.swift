@@ -7,7 +7,8 @@ import Domain
 // MARK: - Provider Icons Preview
 
 #Preview("Provider Icons") {
-    HStack(spacing: 40) {
+    let theme = DarkTheme()
+    return HStack(spacing: 40) {
         VStack(spacing: 8) {
             ProviderIconView(providerId: "claude", size: 32)
             Text("Claude")
@@ -34,13 +35,14 @@ import Domain
         }
     }
     .padding(40)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(theme.backgroundGradient)
 }
 
 // MARK: - Provider Pills Preview
 
 #Preview("Provider Pills") {
-    VStack(spacing: 20) {
+    let theme = DarkTheme()
+    return VStack(spacing: 20) {
         // Selected states
         HStack(spacing: 8) {
             ProviderPill(providerId: "claude", providerName: "Claude", isSelected: true, hasData: true) {}
@@ -58,7 +60,7 @@ import Domain
         }
     }
     .padding(40)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(theme.backgroundGradient)
 }
 
 // MARK: - Stat Cards Preview
@@ -74,7 +76,7 @@ import Domain
     WrappedStatCard(quota: healthyQuota, delay: 0)
         .frame(width: 160)
         .padding(20)
-        .background(AppTheme.backgroundGradient(for: .dark))
+        .background(DarkTheme().backgroundGradient)
 }
 
 #Preview("Stat Cards - Warning") {
@@ -88,7 +90,7 @@ import Domain
     WrappedStatCard(quota: warningQuota, delay: 0)
         .frame(width: 160)
         .padding(20)
-        .background(AppTheme.backgroundGradient(for: .dark))
+        .background(DarkTheme().backgroundGradient)
 }
 
 #Preview("Stat Cards - Critical") {
@@ -102,7 +104,7 @@ import Domain
     WrappedStatCard(quota: criticalQuota, delay: 0)
         .frame(width: 160)
         .padding(20)
-        .background(AppTheme.backgroundGradient(for: .dark))
+        .background(DarkTheme().backgroundGradient)
 }
 
 #Preview("Stat Cards Grid") {
@@ -120,7 +122,7 @@ import Domain
     }
     .padding(20)
     .frame(width: 360)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(DarkTheme().backgroundGradient)
 }
 
 #Preview("Stat Cards - Z.ai") {
@@ -137,49 +139,51 @@ import Domain
     }
     .padding(20)
     .frame(width: 360)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(DarkTheme().backgroundGradient)
 }
 
 // MARK: - Status Badges Preview
 
 #Preview("Status Badges") {
-    VStack(spacing: 16) {
+    let theme = DarkTheme()
+    return VStack(spacing: 16) {
         HStack(spacing: 12) {
-            Text("HEALTHY").badge(AppTheme.statusHealthy(for: .dark))
-            Text("WARNING").badge(AppTheme.statusWarning(for: .dark))
-            Text("LOW").badge(AppTheme.statusCritical(for: .dark))
-            Text("EMPTY").badge(AppTheme.statusDepleted(for: .dark))
+            Text("HEALTHY").badge(theme.statusHealthy)
+            Text("WARNING").badge(theme.statusWarning)
+            Text("LOW").badge(theme.statusCritical)
+            Text("EMPTY").badge(theme.statusDepleted)
         }
     }
     .padding(40)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(theme.backgroundGradient)
 }
 
 // MARK: - Action Buttons Preview
 
 #Preview("Action Buttons") {
-    HStack(spacing: 12) {
+    let theme = DarkTheme()
+    return HStack(spacing: 12) {
         WrappedActionButton(
             icon: "safari.fill",
             label: "Dashboard",
-            gradient: AppTheme.providerGradient(for: "claude", scheme: .dark)
+            gradient: ProviderVisualIdentityLookup.gradient(for: "claude", scheme: .dark)
         ) {}
 
         WrappedActionButton(
             icon: "arrow.clockwise",
             label: "Refresh",
-            gradient: AppTheme.accentGradient(for: .dark)
+            gradient: theme.accentGradient
         ) {}
 
         WrappedActionButton(
             icon: "arrow.clockwise",
             label: "Syncing",
-            gradient: AppTheme.accentGradient(for: .dark),
+            gradient: theme.accentGradient,
             isLoading: true
         ) {}
     }
     .padding(40)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(theme.backgroundGradient)
 }
 
 // MARK: - Loading Spinner Preview
@@ -187,7 +191,7 @@ import Domain
 #Preview("Loading Spinner") {
     LoadingSpinnerView()
         .frame(width: 300)
-        .background(AppTheme.backgroundGradient(for: .dark))
+        .background(DarkTheme().backgroundGradient)
 }
 
 // MARK: - Glass Card Preview
@@ -212,32 +216,33 @@ import Domain
     }
     .padding(40)
     .frame(width: 300)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(DarkTheme().backgroundGradient)
 }
 
 // MARK: - Theme Colors Preview
 
 #Preview("Theme Colors") {
-    VStack(spacing: 20) {
+    let theme = DarkTheme()
+    return VStack(spacing: 20) {
         Text("Provider Colors")
             .font(.headline)
             .foregroundStyle(.white)
 
         HStack(spacing: 20) {
             VStack {
-                Circle().fill(AppTheme.providerColor(for: "claude", scheme: .dark)).frame(width: 40, height: 40)
+                Circle().fill(ProviderVisualIdentityLookup.color(for: "claude", scheme: .dark)).frame(width: 40, height: 40)
                 Text("Claude").font(.caption).foregroundStyle(.white)
             }
             VStack {
-                Circle().fill(AppTheme.providerColor(for: "codex", scheme: .dark)).frame(width: 40, height: 40)
+                Circle().fill(ProviderVisualIdentityLookup.color(for: "codex", scheme: .dark)).frame(width: 40, height: 40)
                 Text("Codex").font(.caption).foregroundStyle(.white)
             }
             VStack {
-                Circle().fill(AppTheme.providerColor(for: "gemini", scheme: .dark)).frame(width: 40, height: 40)
+                Circle().fill(ProviderVisualIdentityLookup.color(for: "gemini", scheme: .dark)).frame(width: 40, height: 40)
                 Text("Gemini").font(.caption).foregroundStyle(.white)
             }
             VStack {
-                Circle().fill(AppTheme.providerColor(for: "zai", scheme: .dark)).frame(width: 40, height: 40)
+                Circle().fill(ProviderVisualIdentityLookup.color(for: "zai", scheme: .dark)).frame(width: 40, height: 40)
                 Text("Z.ai").font(.caption).foregroundStyle(.white)
             }
         }
@@ -248,40 +253,44 @@ import Domain
 
         HStack(spacing: 20) {
             VStack {
-                Circle().fill(AppTheme.statusHealthy(for: .dark)).frame(width: 40, height: 40)
+                Circle().fill(theme.statusHealthy).frame(width: 40, height: 40)
                 Text("Healthy").font(.caption).foregroundStyle(.white)
             }
             VStack {
-                Circle().fill(AppTheme.statusWarning(for: .dark)).frame(width: 40, height: 40)
+                Circle().fill(theme.statusWarning).frame(width: 40, height: 40)
                 Text("Warning").font(.caption).foregroundStyle(.white)
             }
             VStack {
-                Circle().fill(AppTheme.statusCritical(for: .dark)).frame(width: 40, height: 40)
+                Circle().fill(theme.statusCritical).frame(width: 40, height: 40)
                 Text("Critical").font(.caption).foregroundStyle(.white)
             }
             VStack {
-                Circle().fill(AppTheme.statusDepleted(for: .dark)).frame(width: 40, height: 40)
+                Circle().fill(theme.statusDepleted).frame(width: 40, height: 40)
                 Text("Depleted").font(.caption).foregroundStyle(.white)
             }
         }
     }
     .padding(40)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(theme.backgroundGradient)
 }
 
 // MARK: - Update Badge Preview
 
 #Preview("Update Badge") {
-    HStack(spacing: 40) {
+    let darkTheme = DarkTheme()
+    let lightTheme = LightTheme()
+    let christmasTheme = ChristmasTheme()
+
+    return HStack(spacing: 40) {
         // Dark mode - default
         VStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(AppTheme.glassBackground(for: .dark))
+                    .fill(darkTheme.glassBackground)
                     .frame(width: 32, height: 32)
                 Image(systemName: "gearshape.fill")
                     .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(AppTheme.textSecondary(for: .dark))
+                    .foregroundStyle(darkTheme.textSecondary)
                 UpdateBadge()
                     .offset(x: 14, y: -14)
             }
@@ -294,11 +303,11 @@ import Domain
         VStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(AppTheme.glassBackground(for: .light))
+                    .fill(lightTheme.glassBackground)
                     .frame(width: 32, height: 32)
                 Image(systemName: "gearshape.fill")
                     .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(AppTheme.textSecondary(for: .light))
+                    .foregroundStyle(lightTheme.textSecondary)
                 UpdateBadge()
                     .offset(x: 14, y: -14)
             }
@@ -312,12 +321,12 @@ import Domain
         VStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(AppTheme.christmasGlassBackground)
+                    .fill(christmasTheme.glassBackground)
                     .frame(width: 32, height: 32)
                 Image(systemName: "gearshape.fill")
                     .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(AppTheme.christmasTextSecondary)
-                UpdateBadge(accentColor: ChristmasTheme().accentPrimary)
+                    .foregroundStyle(christmasTheme.textSecondary)
+                UpdateBadge(accentColor: christmasTheme.accentPrimary)
                     .offset(x: 14, y: -14)
             }
             Text("Christmas")
@@ -326,24 +335,25 @@ import Domain
         }
     }
     .padding(40)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(darkTheme.backgroundGradient)
 }
 
 // MARK: - Full Header Preview
 
 #Preview("Header Section") {
-    VStack(spacing: 16) {
+    let theme = DarkTheme()
+    return VStack(spacing: 16) {
         // Header mock
         HStack(spacing: 12) {
             ProviderIconView(providerId: "claude", size: 24)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("ClaudeBar")
-                    .font(AppTheme.titleFont(size: 18))
+                    .font(.system(size: 18, weight: .bold, design: theme.fontDesign))
                     .foregroundStyle(.white)
 
                 Text("AI Usage Monitor")
-                    .font(AppTheme.captionFont(size: 11))
+                    .font(.system(size: 11, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(.white.opacity(0.7))
             }
 
@@ -352,17 +362,17 @@ import Domain
             // Status badge
             HStack(spacing: 6) {
                 Circle()
-                    .fill(AppTheme.statusHealthy(for: .dark))
+                    .fill(theme.statusHealthy)
                     .frame(width: 8, height: 8)
                 Text("HEALTHY")
-                    .font(AppTheme.captionFont(size: 11))
+                    .font(.system(size: 11, weight: .semibold, design: theme.fontDesign))
                     .foregroundStyle(.white)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
             .background(
                 Capsule()
-                    .fill(AppTheme.statusHealthy(for: .dark).opacity(0.25))
+                    .fill(theme.statusHealthy.opacity(0.25))
             )
         }
         .padding(.horizontal, 16)
@@ -377,5 +387,5 @@ import Domain
     }
     .padding(.vertical, 20)
     .frame(width: 420)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(theme.backgroundGradient)
 }

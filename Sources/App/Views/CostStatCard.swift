@@ -8,6 +8,7 @@ struct CostStatCard: View {
     let externalBudget: Decimal?
     let delay: Double
 
+    @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
     @State private var isHovering = false
     @State private var animateProgress = false
@@ -42,11 +43,11 @@ struct CostStatCard: View {
                 HStack(spacing: 5) {
                     Image(systemName: "dollarsign.circle.fill")
                         .font(.system(size: 9, weight: .bold))
-                        .foregroundStyle(budgetStatus?.themeColor(for: colorScheme) ?? AppTheme.statusHealthy(for: colorScheme))
+                        .foregroundStyle(budgetStatusColor)
 
                     Text("API COST")
-                        .font(AppTheme.captionFont(size: 8))
-                        .foregroundStyle(AppTheme.textSecondary(for: colorScheme))
+                        .font(.system(size: 8, weight: .semibold, design: theme.fontDesign))
+                        .foregroundStyle(theme.textSecondary)
                         .tracking(0.3)
                 }
 
@@ -55,15 +56,15 @@ struct CostStatCard: View {
                 // Status badge
                 if let status = budgetStatus {
                     Text(status.badgeText)
-                        .badge(status.themeColor(for: colorScheme))
+                        .badge(theme.statusColor(for: status.toQuotaStatus))
                 }
             }
 
             // Large cost display
             HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text(costUsage.formattedCost)
-                    .font(AppTheme.statFont(size: 28))
-                    .foregroundStyle(AppTheme.textPrimary(for: colorScheme))
+                    .font(.system(size: 28, weight: .heavy, design: theme.fontDesign))
+                    .foregroundStyle(theme.textPrimary)
                     .contentTransition(.numericText())
             }
 
@@ -79,9 +80,9 @@ struct CostStatCard: View {
                         .font(.system(size: 7))
 
                     Text("API Time: \(costUsage.formattedApiDuration)")
-                        .font(AppTheme.captionFont(size: 9))
+                        .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                 }
-                .foregroundStyle(AppTheme.textTertiary(for: colorScheme))
+                .foregroundStyle(theme.textTertiary)
                 .lineLimit(1)
             } else if let resetText = costUsage.resetText {
                 HStack(spacing: 3) {
@@ -89,9 +90,9 @@ struct CostStatCard: View {
                         .font(.system(size: 7))
 
                     Text(resetText)
-                        .font(AppTheme.captionFont(size: 9))
+                        .font(.system(size: 9, weight: .semibold, design: theme.fontDesign))
                 }
-                .foregroundStyle(AppTheme.textTertiary(for: colorScheme))
+                .foregroundStyle(theme.textTertiary)
                 .lineLimit(1)
             }
         }
@@ -99,17 +100,17 @@ struct CostStatCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             ZStack {
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(AppTheme.cardGradient(for: colorScheme))
+                RoundedRectangle(cornerRadius: theme.cardCornerRadius)
+                    .fill(theme.cardGradient)
 
                 // Light mode shadow
                 if colorScheme == .light {
-                    RoundedRectangle(cornerRadius: 14)
+                    RoundedRectangle(cornerRadius: theme.cardCornerRadius)
                         .fill(Color.clear)
-                        .shadow(color: AppTheme.glassShadow(for: colorScheme), radius: 6, y: 3)
+                        .shadow(color: Color.black.opacity(0.1), radius: 6, y: 3)
                 }
 
-                RoundedRectangle(cornerRadius: 14)
+                RoundedRectangle(cornerRadius: theme.cardCornerRadius)
                     .stroke(cardBorderGradient, lineWidth: 1)
             }
         )
@@ -130,7 +131,7 @@ struct CostStatCard: View {
                 ZStack(alignment: .leading) {
                     // Track
                     RoundedRectangle(cornerRadius: 3)
-                        .fill(progressTrackColor)
+                        .fill(theme.progressTrack)
 
                     // Fill
                     RoundedRectangle(cornerRadius: 3)
@@ -144,8 +145,8 @@ struct CostStatCard: View {
             // Budget label
             HStack {
                 Text("\(Int(budgetPercentUsed))% of \(formatBudget(budget)) budget")
-                    .font(AppTheme.captionFont(size: 8))
-                    .foregroundStyle(AppTheme.textTertiary(for: colorScheme))
+                    .font(.system(size: 8, weight: .semibold, design: theme.fontDesign))
+                    .foregroundStyle(theme.textTertiary)
 
                 Spacer()
             }
@@ -154,18 +155,17 @@ struct CostStatCard: View {
 
     // MARK: - Styling
 
-    private var progressTrackColor: Color {
-        colorScheme == .dark
-            ? Color.white.opacity(0.15)
-            : AppTheme.purpleDeep(for: colorScheme).opacity(0.1)
+    private var budgetStatusColor: Color {
+        guard let status = budgetStatus else { return theme.statusHealthy }
+        return theme.statusColor(for: status.toQuotaStatus)
     }
 
     private var budgetProgressGradient: LinearGradient {
         guard let status = budgetStatus else {
-            return LinearGradient(colors: [AppTheme.statusHealthy(for: colorScheme)], startPoint: .leading, endPoint: .trailing)
+            return LinearGradient(colors: [theme.statusHealthy], startPoint: .leading, endPoint: .trailing)
         }
 
-        let color = status.themeColor(for: colorScheme)
+        let color = theme.statusColor(for: status.toQuotaStatus)
         return LinearGradient(
             colors: [color.opacity(0.8), color],
             startPoint: .leading,
@@ -176,12 +176,8 @@ struct CostStatCard: View {
     private var cardBorderGradient: LinearGradient {
         LinearGradient(
             colors: [
-                colorScheme == .dark
-                    ? Color.white.opacity(isHovering ? 0.35 : 0.25)
-                    : AppTheme.purpleVibrant(for: colorScheme).opacity(isHovering ? 0.3 : 0.18),
-                colorScheme == .dark
-                    ? Color.white.opacity(0.08)
-                    : AppTheme.pinkHot(for: colorScheme).opacity(0.08)
+                theme.glassBorder.opacity(isHovering ? 1.2 : 1.0),
+                theme.glassBorder.opacity(0.3)
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -202,7 +198,7 @@ struct CostStatCard: View {
 
 #Preview("Cost Card - Dark") {
     ZStack {
-        AppTheme.backgroundGradient(for: .dark)
+        DarkTheme().backgroundGradient
 
         CostStatCard(
             costUsage: CostUsage(
@@ -223,7 +219,7 @@ struct CostStatCard: View {
 
 #Preview("Cost Card - Light") {
     ZStack {
-        AppTheme.backgroundGradient(for: .light)
+        LightTheme().backgroundGradient
 
         CostStatCard(
             costUsage: CostUsage(
@@ -244,7 +240,7 @@ struct CostStatCard: View {
 
 #Preview("Cost Card - No Budget") {
     ZStack {
-        AppTheme.backgroundGradient(for: .dark)
+        DarkTheme().backgroundGradient
 
         CostStatCard(
             costUsage: CostUsage(

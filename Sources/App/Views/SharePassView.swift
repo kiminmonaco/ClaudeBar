@@ -6,8 +6,8 @@ struct SharePassOverlay: View {
     let pass: ClaudePass
     let onDismiss: () -> Void
 
+    @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.isChristmasTheme) private var isChristmas
     @State private var copied = false
 
     var body: some View {
@@ -25,11 +25,11 @@ struct SharePassOverlay: View {
                 HStack {
                     Image(systemName: "gift.fill")
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(isChristmas ? AppTheme.christmasGold : AppTheme.purpleVibrant(for: colorScheme))
+                        .foregroundStyle(theme.accentPrimary)
 
                     Text("Share Claude Code")
-                        .font(AppTheme.titleFont(size: 14))
-                        .foregroundStyle(isChristmas ? AppTheme.christmasTextPrimary : AppTheme.textPrimary(for: colorScheme))
+                        .font(.system(size: 14, weight: .bold, design: theme.fontDesign))
+                        .foregroundStyle(theme.textPrimary)
 
                     Spacer()
 
@@ -38,7 +38,7 @@ struct SharePassOverlay: View {
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 18))
-                            .foregroundStyle(AppTheme.textTertiary(for: colorScheme))
+                            .foregroundStyle(theme.textTertiary)
                     }
                     .buttonStyle(.plain)
                 }
@@ -46,8 +46,8 @@ struct SharePassOverlay: View {
                 // Referral Link
                 HStack(spacing: 8) {
                     Text(pass.referralURL.absoluteString)
-                        .font(AppTheme.bodyFont(size: 11))
-                        .foregroundStyle(isChristmas ? AppTheme.christmasTextPrimary : AppTheme.textPrimary(for: colorScheme))
+                        .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
+                        .foregroundStyle(theme.textPrimary)
                         .lineLimit(1)
                         .truncationMode(.middle)
 
@@ -58,9 +58,7 @@ struct SharePassOverlay: View {
                     } label: {
                         Image(systemName: copied ? "checkmark.circle.fill" : "doc.on.doc.fill")
                             .font(.system(size: 14))
-                            .foregroundStyle(copied
-                                ? AppTheme.statusHealthy(for: colorScheme)
-                                : (isChristmas ? AppTheme.christmasGold : AppTheme.purpleVibrant(for: colorScheme)))
+                            .foregroundStyle(copied ? theme.statusHealthy : theme.accentPrimary)
                     }
                     .buttonStyle(.plain)
                 }
@@ -79,7 +77,7 @@ struct SharePassOverlay: View {
                             Image(systemName: copied ? "checkmark" : "doc.on.doc")
                                 .font(.system(size: 11, weight: .semibold))
                             Text(copied ? "Copied!" : "Copy Link")
-                                .font(AppTheme.bodyFont(size: 11))
+                                .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                         }
                         .foregroundStyle(.white)
                         .padding(.horizontal, 14)
@@ -87,11 +85,7 @@ struct SharePassOverlay: View {
                         .frame(maxWidth: .infinity)
                         .background(
                             Capsule()
-                                .fill(
-                                    isChristmas
-                                        ? AppTheme.christmasAccentGradient
-                                        : AppTheme.accentGradient(for: colorScheme)
-                                )
+                                .fill(theme.accentGradient)
                         )
                     }
                     .buttonStyle(.plain)
@@ -104,20 +98,17 @@ struct SharePassOverlay: View {
                             Image(systemName: "safari")
                                 .font(.system(size: 11, weight: .semibold))
                             Text("Open")
-                                .font(AppTheme.bodyFont(size: 11))
+                                .font(.system(size: 11, weight: .medium, design: theme.fontDesign))
                         }
-                        .foregroundStyle(isChristmas ? AppTheme.christmasTextPrimary : AppTheme.textPrimary(for: colorScheme))
+                        .foregroundStyle(theme.textPrimary)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 8)
                         .background(
                             Capsule()
-                                .fill(isChristmas ? AppTheme.christmasGlassBackground : AppTheme.glassBackground(for: colorScheme))
+                                .fill(theme.glassBackground)
                                 .overlay(
                                     Capsule()
-                                        .stroke(
-                                            isChristmas ? AppTheme.christmasGlassBorder : AppTheme.glassBorder(for: colorScheme),
-                                            lineWidth: 1
-                                        )
+                                        .stroke(theme.glassBorder, lineWidth: 1)
                                 )
                         )
                     }
@@ -126,23 +117,20 @@ struct SharePassOverlay: View {
 
                 // Help text
                 Text("Share a free week of Claude Code with friends")
-                    .font(AppTheme.captionFont(size: 10))
-                    .foregroundStyle(AppTheme.textTertiary(for: colorScheme))
+                    .font(.system(size: 10, weight: .semibold, design: theme.fontDesign))
+                    .foregroundStyle(theme.textTertiary)
             }
             .padding(16)
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(isChristmas ? AppTheme.christmasGlassBackground : AppTheme.glassBackground(for: colorScheme))
+                    .fill(theme.glassBackground)
                     .background(
                         RoundedRectangle(cornerRadius: 14)
                             .fill(colorScheme == .dark ? Color(white: 0.15) : Color(white: 0.95))
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 14)
-                            .stroke(
-                                isChristmas ? AppTheme.christmasGlassBorder : AppTheme.glassBorder(for: colorScheme),
-                                lineWidth: 1
-                            )
+                            .stroke(theme.glassBorder, lineWidth: 1)
                     )
                     .shadow(color: Color.black.opacity(0.4), radius: 20, y: 10)
             )
@@ -171,7 +159,7 @@ struct SharePassOverlay: View {
 
 #Preview("SharePassOverlay") {
     ZStack {
-        AppTheme.backgroundGradient(for: .dark)
+        DarkTheme().backgroundGradient
 
         SharePassOverlay(
             pass: ClaudePass(

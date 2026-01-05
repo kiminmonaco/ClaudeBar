@@ -9,6 +9,7 @@ struct ProviderIconView: View {
     var size: CGFloat = 24
     var showGlow: Bool = true
 
+    @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
@@ -16,7 +17,7 @@ struct ProviderIconView: View {
             if showGlow {
                 // Subtle glow behind icon - adapts to theme
                 Circle()
-                    .fill(AppTheme.providerColor(for: providerId, scheme: colorScheme).opacity(colorScheme == .dark ? 0.3 : 0.2))
+                    .fill(ProviderVisualIdentityLookup.color(for: providerId, scheme: colorScheme).opacity(colorScheme == .dark ? 0.3 : 0.2))
                     .frame(width: size * 1.3, height: size * 1.3)
                     .blur(radius: size * 0.3)
             }
@@ -33,14 +34,14 @@ struct ProviderIconView: View {
                             .stroke(
                                 colorScheme == .dark
                                     ? Color.white.opacity(0.6)
-                                    : AppTheme.purpleVibrant(for: colorScheme).opacity(0.3),
+                                    : theme.accentPrimary.opacity(0.3),
                                 lineWidth: 2
                             )
                     )
                     .shadow(
                         color: colorScheme == .dark
                             ? .black.opacity(0.15)
-                            : AppTheme.purpleDeep(for: colorScheme).opacity(0.15),
+                            : theme.accentPrimary.opacity(0.15),
                         radius: 3,
                         y: 1
                     )
@@ -48,7 +49,7 @@ struct ProviderIconView: View {
                 // Fallback: Use system symbol with gradient background
                 ZStack {
                     Circle()
-                        .fill(AppTheme.providerGradient(for: providerId, scheme: colorScheme))
+                        .fill(ProviderVisualIdentityLookup.gradient(for: providerId, scheme: colorScheme))
                         .frame(width: size, height: size)
 
                     Image(systemName: providerSymbol(for: providerId))
@@ -60,14 +61,14 @@ struct ProviderIconView: View {
                         .stroke(
                             colorScheme == .dark
                                 ? Color.white.opacity(0.6)
-                                : AppTheme.providerColor(for: providerId, scheme: colorScheme).opacity(0.3),
+                                : ProviderVisualIdentityLookup.color(for: providerId, scheme: colorScheme).opacity(0.3),
                             lineWidth: 2
                         )
                 )
                 .shadow(
                     color: colorScheme == .dark
                         ? .black.opacity(0.15)
-                        : AppTheme.providerColor(for: providerId, scheme: colorScheme).opacity(0.15),
+                        : ProviderVisualIdentityLookup.color(for: providerId, scheme: colorScheme).opacity(0.15),
                     radius: 3,
                     y: 1
                 )
@@ -76,7 +77,7 @@ struct ProviderIconView: View {
     }
 
     private func loadProviderIcon(for providerId: String) -> NSImage? {
-        let assetName = AppTheme.providerIconAssetName(for: providerId)
+        let assetName = ProviderVisualIdentityLookup.iconAssetName(for: providerId)
 
         // Load from asset catalog
         if let image = NSImage(named: assetName) {
@@ -122,7 +123,7 @@ struct ProviderIconView: View {
         }
     }
     .padding(40)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(DarkTheme().backgroundGradient)
     .preferredColorScheme(.dark)
 }
 
@@ -132,23 +133,23 @@ struct ProviderIconView: View {
             ProviderIconView(providerId: "claude", size: 40)
             Text("Claude")
                 .font(.caption)
-                .foregroundStyle(AppTheme.textPrimary(for: .light))
+                .foregroundStyle(LightTheme().textPrimary)
         }
         VStack {
             ProviderIconView(providerId: "codex", size: 40)
             Text("Codex")
                 .font(.caption)
-                .foregroundStyle(AppTheme.textPrimary(for: .light))
+                .foregroundStyle(LightTheme().textPrimary)
         }
         VStack {
             ProviderIconView(providerId: "gemini", size: 40)
             Text("Gemini")
                 .font(.caption)
-                .foregroundStyle(AppTheme.textPrimary(for: .light))
+                .foregroundStyle(LightTheme().textPrimary)
         }
     }
     .padding(40)
-    .background(AppTheme.backgroundGradient(for: .light))
+    .background(LightTheme().backgroundGradient)
     .preferredColorScheme(.light)
 }
 
@@ -160,6 +161,6 @@ struct ProviderIconView: View {
         ProviderIconView(providerId: "claude", size: 48)
     }
     .padding(40)
-    .background(AppTheme.backgroundGradient(for: .dark))
+    .background(DarkTheme().backgroundGradient)
     .preferredColorScheme(.dark)
 }
